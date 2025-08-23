@@ -2,24 +2,28 @@
 
 ## 🚀 Recruiting Platform App
 
-A full-stack recruitment platform simulating real-world job portals like LinkedIn and Indeed, built with Spring Boot backend and React frontend.
+A full-stack recruitment platform simulating real-world job portals like LinkedIn and Indeed, built with Spring Boot
+backend and React frontend.
 
 ## 🎯 Project Overview
 
 This platform enables three main user types to manage recruitment processes:
+
 - **Recruiters** - Post jobs and manage applications
-- **Candidates** - Discover opportunities and track applications  
+- **Candidates** - Discover opportunities and track applications
 - **Administrators** - Manage users and platform operations
 
 ## ✨ Features
 
 ### Core Functionality
+
 - ✅ **Job Management** - Create, edit, and publish job offers
 - ✅ **Application System** - Candidates can apply and track status
 - ✅ **User Management** - Role-based access control
 - ✅ **Notification System** - Real-time updates for applications
 
 ### User Stories Implemented
+
 - **As a recruiter**: I can post jobs and manage hiring processes
 - **As a candidate**: I can apply for jobs and follow my application status
 - **As an administrator**: I can manage users and platform content
@@ -27,6 +31,7 @@ This platform enables three main user types to manage recruitment processes:
 ## 🛠️ Technology Stack
 
 ### Backend (Current Implementation)
+
 - **Java 21** - Programming language
 - **Spring Boot 3.5.5** - Framework
 - **Spring Data JPA** - Database persistence
@@ -36,18 +41,20 @@ This platform enables three main user types to manage recruitment processes:
 - **Lombok** - Code reduction
 
 ### Frontend (Planned)
+
 - React.js
 - JavaScript/TypeScript
 - CSS3/Tailwind
 
 ## 📊 Database Design
 
-![ER Diagram](backend/recruiting-app/src/main/resources/static/images/erd-diagram.png)
+![ER Diagram](src/main/resources/static/images/erd-diagram.png)
 
 The database schema includes:
+
 - **Users** - Base user information with role-based access
 - **Candidates** - Extended candidate profiles
-- **Recruiters** - Recruiter and company information  
+- **Recruiters** - Recruiter and company information
 - **JobOffers** - Job postings and details
 - **Applications** - Application tracking system
 - **Notifications** - User notification system
@@ -55,12 +62,14 @@ The database schema includes:
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Java 21+
 - MySQL 9.4+
 - Maven 3.6+
 - Node.js 16+ (for frontend)
 
 ### Backend Installation
+
 ```bash
 cd 
 
@@ -69,20 +78,17 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-
-
 ### Environment Configuration
+
 Create `application.properties`:
+
 ```properties
 spr
-
 ing.datasource.url=jdbc:mysql://localhost:3306/recruiting_db
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
 ```
-
-
 
 ## 📁 Project Structure
 
@@ -106,8 +112,6 @@ ruiting-platform/
 └── documentation/         # Project documentation
 ```
 
-
-
 ## 🔐 Security Features
 
 - Role-based authentication (Candidate, Recruiter, Admin)
@@ -118,17 +122,18 @@ ruiting-platform/
 
 ## API Endpoints (Planned)
 
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|---------|
-| POST | `/api/auth/login` | User authentication | Public |
-| GET | `/api/jobs` | List job offers | Public |
-| POST | `/api/jobs` | Create job offer | Recruiter |
-| POST | `/api/applications` | Submit application | Candidate |
-| GET | `/api/users` | List users | Admin |
+| Method | Endpoint            | Description         | Access    |
+|--------|---------------------|---------------------|-----------|
+| POST   | `/api/auth/login`   | User authentication | Public    |
+| GET    | `/api/jobs`         | List job offers     | Public    |
+| POST   | `/api/jobs`         | Create job offer    | Recruiter |
+| POST   | `/api/applications` | Submit application  | Candidate |
+| GET    | `/api/users`        | List users          | Admin     |
 
 ## 🎨 Frontend Preview (Upcoming)
 
 The frontend will feature:
+
 - Responsive design for desktop and mobile
 - Interactive dashboards for each user type
 - Real-time notification system
@@ -138,18 +143,21 @@ The frontend will feature:
 ## 📋 Development Progress
 
 ### ✅ Completed
+
 - [x] Project setup with Spring Initializr
 - [x] Basic Spring Boot configuration
 - [x] Database schema design (ERD)
 - [x] Maven dependencies configuration
 
 ### 🚧 In Progress
+
 - [ ] Entity classes implementation
 - [ ] Repository layer development
 - [ ] Spring Security configuration
 - [ ] REST API endpoints
 
 ### 📅 Planned
+
 - [ ] Frontend React application
 - [ ] JWT authentication implementation
 - [ ] Notification system
@@ -182,8 +190,8 @@ This project is managed using **[Taiga](https://www.taiga.io/)** for backlog, sp
 - Taiga for project management tools
 - The recruitment platform concept inspired by LinkedIn and Indeed
 
-
 ## 💡 To customize your README:
+
 2. **Update progress** as you go
 3. **Include screenshots** when you have the UI
 4. **Add badges** for build status, coverage, etc.
