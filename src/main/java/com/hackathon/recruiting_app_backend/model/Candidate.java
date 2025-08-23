@@ -1,40 +1,35 @@
 package com.hackathon.recruiting_app_backend.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "candidates")
-@lombok.Getter
-@lombok.Setter
-@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
-@lombok.Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Candidate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(length = 20)
     private String phone;
 
-    // url to file
-    @Column(nullable = false)
-    private String resume_file;
+    @Column(name = "resume_file", length = 255)
+    private String resumeFile;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String skills;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String experience;
 
-    // --- relations
-    //    @OneToOne(mappedBy = "candidate", cascade = CascadeType.ALL)
+    // Relationship with User
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
-
-//    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
-//    private List<Application> applications;
-
 }

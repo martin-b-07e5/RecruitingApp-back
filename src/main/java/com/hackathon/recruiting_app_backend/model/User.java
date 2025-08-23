@@ -1,6 +1,7 @@
 package com.hackathon.recruiting_app_backend.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,30 +9,31 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@lombok.Getter
-@lombok.Setter
-@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
-@lombok.Builder  // ver para qué se utiliza esto
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String password;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @CreationTimestamp
@@ -47,25 +49,4 @@ public class User {
         CANDIDATE,
         RECRUITER
     }
-
-    // Relations
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Candidate candidate;
-
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Recruiter recruiter;
-
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Notification> notifications;
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<AdminLog> adminLogs;
-
-
-
 }
-
-
-
-
-
