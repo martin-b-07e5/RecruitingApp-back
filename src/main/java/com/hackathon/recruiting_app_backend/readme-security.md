@@ -550,8 +550,76 @@ public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request
 ```
 
 **This way** the service returns the complete response with the actual user role.
+
 ---
 ---
+
+# 🧪 **Testing the JWT Authentication**
+
+## **1. First, add the missing properties to application.properties:**
+
+```properties
+jwt.secret=yourSuperSecretKeyWithAtLeast256BitsLongForHS256
+jwt.expiration=86400000
+```
+
+## **2. Test with curl or Postman:**
+
+### **Register a user:**
+
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "password123",
+    "firstName": "John",
+    "lastName": "Doe",
+    "role": "CANDIDATE"
+  }'
+```
+
+### **Login:**
+
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "password123"
+  }'
+```
+
+## **3. Expected responses:**
+
+**Register response:**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "email": "test@example.com",
+  "role": "CANDIDATE"
+}
+```
+
+**Login response:**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "email": "test@example.com",
+  "role": "CANDIDATE"
+}
+```
+
+## **4. Test protected endpoint:**
+
+```bash
+curl -X GET http://localhost:8080/api/candidate/profile \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
+```
+
+**If you get a 200 OK, authentication is working!** 🎉
 ---
 ---
 ---
