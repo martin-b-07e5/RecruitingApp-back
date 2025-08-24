@@ -33,9 +33,6 @@ public class JobOffer {
     @Column(name = "salary", nullable = false)
     private String salary;
 
-    @Column(name = "employment_type", nullable = false)
-    private EmploymentType employmentType;
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -44,11 +41,19 @@ public class JobOffer {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "employment_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EmploymentType employmentType;
+
     public enum EmploymentType {
         FULL_TIME,
         PART_TIME,
         FREELANCE,
-        INTERNSHIP
+        INTERNSHIP,
+        CONTRACTOR,     // For fixed-term contracts
+        TEMPORARY,      // Temporary
+        REMOTE,         // Remote (if specific)
+        HYBRID;         // Hybrid
     }
 
     // Inverse relationship in JobOffer with Company
@@ -78,6 +83,5 @@ public class JobOffer {
 //    // one jobOffer has many candidates
 //    @OneToMany(mappedBy = "jobOffer")
 //    private Set<Candidate> candidates;
-
 
 }

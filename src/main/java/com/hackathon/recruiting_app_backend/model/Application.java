@@ -29,12 +29,17 @@ public class Application {
     private LocalDateTime updatedAt;
 
     @Column(name = "status", nullable = false)
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus status;
 
-    public enum Status {
-        PENDING,
+    public enum ApplicationStatus {
+        DRAFT,          // For the recruiter
+        PENDING,        // Application submitted
+        UNDER_REVIEW,   // Under review
+        INTERVIEW,      // Moved on to interview
         ACCEPTED,
-        REJECTED
+        REJECTED,
+        WITHDRAWN       // Candidate withdrew application
     }
 
     // Inverse relationship in Application with JobOffer
