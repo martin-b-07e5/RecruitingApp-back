@@ -3,6 +3,9 @@ package com.hackathon.recruiting_app_backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "candidates")
 @Getter
@@ -32,5 +35,8 @@ public class Candidate {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
-    
+
+    // one candidate has 0 or many applications
+    @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY)
+    private Set<Application> applications = new HashSet<>();
 }
