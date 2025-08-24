@@ -87,12 +87,14 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+        <!-- https://jwt.io/libraries?language=Java -->
+        <!-- https://github.com/auth0/java-jwt -->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.5.0</version>
         </dependency>
+
 
         <!-- xxx -->
         <!-- xxx -->
