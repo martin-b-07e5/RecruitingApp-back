@@ -23,23 +23,31 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String login(String email, String password) {
+    public AuthResponseDTO login(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found after authentication"));
 
-        return jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+
+//        return jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        return new AuthResponseDTO(token, user.getEmail(), user.getRole().name());
+
     }
 
-    public String register(User user) {
+    public AuthResponseDTO register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRole().name());
+
+//        return jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        return new AuthResponseDTO(token, savedUser.getEmail(), savedUser.getRole().name());
+
     }
 
 

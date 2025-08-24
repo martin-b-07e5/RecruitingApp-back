@@ -508,6 +508,48 @@ public class AuthController {
 **Note:** The login response needs user role lookup - you'll need to add that to AuthService.
 
 ---
+
+# Note: The login response needs user role lookup - you'll need to add that to AuthService.
+
+# 🔍 **The login response is incomplete**
+
+In your `AuthController.login()` method:
+
+```java
+return ResponseEntity.ok(new AuthResponseDTO(token, request.getEmail(), "ROLE"));
+```
+
+The `"ROLE"` is hardcoded - you need to **get the actual user's role** from the database.
+
+## ✅ **Fix in AuthService.login():**
+
+```java
+public AuthResponseDTO login(String email, String password) {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(email, password)
+    );
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found after authentication"));
+
+    String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+
+    return new AuthResponseDTO(token, user.getEmail(), user.getRole().name());
+}
+```
+
+## ✅ **Then update AuthController:**
+
+```java
+
+@PostMapping("/login")
+public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request) {
+    AuthResponseDTO response = authService.login(request.getEmail(), request.getPassword());
+    return ResponseEntity.ok(response);
+}
+```
+
+**This way** the service returns the complete response with the actual user role.
 ---
 ---
 ---
