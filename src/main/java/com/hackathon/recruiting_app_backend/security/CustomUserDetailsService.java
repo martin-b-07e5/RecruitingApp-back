@@ -12,8 +12,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final IUserRepository IUserRepository;
 
-    public CustomUserDetailsService(IUserRepository IUserRepository) {
-        this.IUserRepository = IUserRepository;
+    public CustomUserDetailsService(IUserRepository userRepository) {
+        this.IUserRepository = userRepository;
     }
 
     @Override

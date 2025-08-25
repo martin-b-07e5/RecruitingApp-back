@@ -1,6 +1,5 @@
 package com.hackathon.recruiting_app_backend.security;
 
-import com.hackathon.recruiting_app_backend.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,15 +16,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-/* // 🔍 The login response is incomplete
-// The "ROLE" is hardcoded - you need to get the actual user's role from the database.
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request) {
-        String token = authService.login(request.getEmail(), request.getPassword());
-        // You'll need to add user details lookup here for the response
-        return ResponseEntity.ok(new AuthResponseDTO(token, request.getEmail(), "ROLE"));
-    }*/
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request) {
         AuthResponseDTO response = authService.login(request.getEmail(), request.getPassword());
@@ -33,10 +23,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(@RequestBody User user) {
-//        String token = authService.register(user);
-        AuthResponseDTO response = authService.register(user);
-//        return ResponseEntity.ok(new AuthResponseDTO(token, user.getEmail(), user.getRole().name()));
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequestDTO request) {
+        AuthResponseDTO response = authService.register(request);
         return ResponseEntity.ok(response);
     }
 

@@ -3,39 +3,39 @@ package com.hackathon.recruiting_app_backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "recruiters")
+@PrimaryKeyJoinColumn(name = "user_id")
+@DiscriminatorValue("RECRUITER")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Recruiter {
+public class Recruiter extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // One recruiter creates 0 or many jobOffers
+    @OneToMany(mappedBy = "recruiter")
+    private List<JobOffer> jobOffers = new ArrayList<>();
 
-    @Column(name = "company_name", length = 50, nullable = false)
-    private String companyName;
+    // many jobOffers belong to one company
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
-    @Column(name = "company_description", columnDefinition = "TEXT")
-    private String companyDescription;
-
-    @Column(length = 20)
-    private String phone;
-
-    // Relationship with User
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
-
-    // One recruiter has 0 or many job offers
-    @OneToMany(mappedBy = "recruiter", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<JobOffer> jobOffers = new HashSet<>();
-
-
+    //    public Recruiter(Long id, String email, String password, String firstName, String lastName, LocalDateTime createdAt, LocalDateTime updatedAt, Role role, Company company) {
+//        super(id, email, password, firstName, lastName, createdAt, updatedAt, role);
+//        this.company = company;
+//    }
+// Constructor con company
+    public Recruiter(String email, String password, String firstName, String lastName,
+                     Role role, Company company) {
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setRole(role);
+        this.company = company;
+    }
 }
