@@ -2,6 +2,7 @@ package com.hackathon.recruiting_app_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,10 +14,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor  // <- Generates a constructor with all fields (including the parent's)
+@SuperBuilder  // <- Generates the builder pattern
 public class Candidate extends User {
-
-    @Column(length = 20)
-    private String phone;
 
     @Column(name = "resume_file", length = 254)
     private String resumeFile;
@@ -31,17 +31,21 @@ public class Candidate extends User {
     @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY)
     private Set<Application> applications = new HashSet<>();
 
-    // Candidate Constructor
-    public Candidate(String email, String password, String firstName, String lastName,
-                     String phone, String resumeFile, String skills, String experience) {
-        this.setEmail(email);
-        this.setPassword(password);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.phone = phone;
-        this.resumeFile = resumeFile;
-        this.skills = skills;
-        this.experience = experience;
-    }
+    /* Constructor to create new Candidates
+       Not required with:
+       @AllArgsConstructor
+       @Builder
+     */
+//    public Candidate(String email, String password, String firstName, String lastName, String phone,
+//                     String resumeFile, String skills, String experience) {
+//        // Call the parent class's constructor (User), forcing Role.CANDIDATE
+//        // Leave id, createdAt, and updatedAt null. JPA/Hibernate will handle them.
+//        super(null, email, password, firstName, lastName, null, null, Role.CANDIDATE);
+//        this.phone = phone;
+//        this.resumeFile = resumeFile;
+//        this.skills = skills;
+//        this.experience = experience;
+//       // Don't initialize 'applications', it is already initialized with new HashSet<>() above.
+//    }
 
 }

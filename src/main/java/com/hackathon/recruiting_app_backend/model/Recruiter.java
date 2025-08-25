@@ -2,6 +2,7 @@ package com.hackathon.recruiting_app_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor // <- Generates a constructor with all fields (including the parent's)
+@SuperBuilder // <- Generates the builder pattern
 public class Recruiter extends User {
 
     // One recruiter creates 0 or many jobOffers
@@ -24,18 +27,4 @@ public class Recruiter extends User {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    //    public Recruiter(Long id, String email, String password, String firstName, String lastName, LocalDateTime createdAt, LocalDateTime updatedAt, Role role, Company company) {
-//        super(id, email, password, firstName, lastName, createdAt, updatedAt, role);
-//        this.company = company;
-//    }
-// Constructor con company
-    public Recruiter(String email, String password, String firstName, String lastName,
-                     Role role, Company company) {
-        this.setEmail(email);
-        this.setPassword(password);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setRole(role);
-        this.company = company;
-    }
 }

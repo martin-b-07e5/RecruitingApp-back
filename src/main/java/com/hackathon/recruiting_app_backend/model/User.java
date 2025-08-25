@@ -1,7 +1,13 @@
 package com.hackathon.recruiting_app_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,6 +21,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public abstract class User {
 
     @Id
@@ -22,16 +29,29 @@ public abstract class User {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 254)
+    @Email(message = "Email must be valid")
+    @Size(min = 5, max = 254, message = "Email must be between 5 and 254 characters long")
+    @NotNull(message = "Email must not be null")
     private String email;
 
     @Column(nullable = false)
+    @Size(min = 6, message = "Password must be at least 6 characters long")
+    @NotNull(message = "Password must not be null")
+    @JsonIgnore
     private String password;
 
     @Column(name = "first_name", nullable = false, length = 50)
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters long")
+    @NotNull(message = "First name must not be null")
     private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 50)
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
+    @NotNull(message = "Last name must not be null")
     private String lastName;
+
+    @Column(length = 20)
+    private String phone;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
