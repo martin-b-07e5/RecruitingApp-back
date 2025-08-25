@@ -8,10 +8,10 @@ public class RegisterRequestDTO {
     private String password;
     private String firstName;
     private String lastName;
+    private String phone;
     private String role;
     //
     // Specific fields for each type of user
-    private String phone;
     private String resumeFile;
     private String skills;
     private String experience;

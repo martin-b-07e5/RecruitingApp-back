@@ -71,8 +71,8 @@ public class AuthService {
                 candidate.setPassword(passwordEncoder.encode(request.getPassword()));
                 candidate.setFirstName(request.getFirstName());
                 candidate.setLastName(request.getLastName());
-                candidate.setRole(User.Role.CANDIDATE);
                 candidate.setPhone(request.getPhone());
+                candidate.setRole(User.Role.CANDIDATE);
                 candidate.setResumeFile(request.getResumeFile());
                 candidate.setSkills(request.getSkills());
                 candidate.setExperience(request.getExperience());
@@ -85,6 +85,7 @@ public class AuthService {
                 recruiter.setPassword(passwordEncoder.encode(request.getPassword()));
                 recruiter.setFirstName(request.getFirstName());
                 recruiter.setLastName(request.getLastName());
+                recruiter.setPhone(request.getPhone());
                 recruiter.setRole(User.Role.RECRUITER);
 
                 if (request.getCompanyId() != null) {
