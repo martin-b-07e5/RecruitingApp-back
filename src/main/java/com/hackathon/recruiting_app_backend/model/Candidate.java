@@ -8,21 +8,17 @@ import java.util.Set;
 
 @Entity
 @Table(name = "candidates")
+@PrimaryKeyJoinColumn(name = "user_id")
+@DiscriminatorValue("CANDIDATE")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Candidate {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Candidate extends User {
 
     @Column(length = 20)
     private String phone;
 
-    @Column(name = "resume_file", length = 255)
+    @Column(name = "resume_file", length = 254)
     private String resumeFile;
 
     @Column(columnDefinition = "TEXT")
@@ -31,12 +27,21 @@ public class Candidate {
     @Column(columnDefinition = "TEXT")
     private String experience;
 
-    // Relationship with User
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user;
-
     // one candidate has 0 or many applications
     @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY)
     private Set<Application> applications = new HashSet<>();
+
+    // Candidate Constructor
+    public Candidate(String email, String password, String firstName, String lastName,
+                     String phone, String resumeFile, String skills, String experience) {
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.phone = phone;
+        this.resumeFile = resumeFile;
+        this.skills = skills;
+        this.experience = experience;
+    }
+
 }
