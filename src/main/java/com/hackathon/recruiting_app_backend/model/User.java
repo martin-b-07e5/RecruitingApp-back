@@ -3,11 +3,9 @@ package com.hackathon.recruiting_app_backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -89,5 +87,9 @@ public class User {
     // Relationship for candidates with applications
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications;
+
+    // Relationship for recruiters with job offers
+    @OneToMany(mappedBy = "user")
+    private List<JobOffer> jobOffers;  // A recruiter can create many job offers
 
 }
