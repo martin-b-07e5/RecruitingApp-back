@@ -47,9 +47,6 @@ public class Application {
     @JoinColumn(name = "job_offer_id")
     private JobOffer jobOffer;
 
-    // Inverse relationship in Application with Candidate
-    @ManyToOne
-    @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+//    
 
 }
