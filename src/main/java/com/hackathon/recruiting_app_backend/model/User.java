@@ -16,13 +16,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+//@SuperBuilder
+@Builder
 public class User {
 
     @Id
