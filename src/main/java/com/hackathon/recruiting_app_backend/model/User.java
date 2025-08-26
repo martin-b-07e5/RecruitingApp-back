@@ -81,4 +81,12 @@ public class User {
     @Column
     private String experience;
 
+    // Relationship for both: recruiters and candidates with companies
+    @OneToMany(mappedBy = "user")
+    private List<UserCompany> companies;
+
+    // Relationship for candidates with applications
+    @OneToMany(mappedBy = "candidate")
+    private List<Application> applications;
+
 }

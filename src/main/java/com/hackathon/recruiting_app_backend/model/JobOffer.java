@@ -59,24 +59,10 @@ public class JobOffer {
     // Inverse relationship in JobOffer with Company
     @ManyToOne
     @JoinColumn(name = "company_id")
-    private Company company;
+    private Company company;  // Each job offer belongs to one company
 
     // one jobOffer has N applications
     @OneToMany(mappedBy = "jobOffer")
     private Set<Application> applications;
-
-//    // one jobOffer has one company
-//    @ManyToOne
-//    @JoinColumn(name = "company_id", nullable = false)
-//    private Company company;
-
-//    // one jobOffer has one recruiter
-//    @ManyToOne
-//    @JoinColumn(name = "recruiter_id", nullable = false)
-//    private Recruiter recruiter;
-
-//    // one jobOffer has many candidates
-//    @OneToMany(mappedBy = "jobOffer")
-//    private Set<Candidate> candidates;
 
 }
