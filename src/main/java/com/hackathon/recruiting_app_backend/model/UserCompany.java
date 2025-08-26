@@ -14,11 +14,11 @@ public class UserCompany {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User user;  // Many employment records can belong to one user
 
     @ManyToOne
     @JoinColumn(name = "company_id")
-    private Company company;
+    private Company company;  // Many employment records can belong to one company
 
     private String position;  // Recruiter Manage | Software Developer | Full Stack Developer | etc.
     private LocalDate startDate;
