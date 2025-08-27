@@ -22,20 +22,20 @@ public class Recruiter extends User {
     // many jobOffers belong to one company
     @ManyToOne
     @JoinColumn(name = "company_id")
-    private Company company;
+    private String company;
 
     //    public Recruiter(Long id, String email, String password, String firstName, String lastName, LocalDateTime createdAt, LocalDateTime updatedAt, Role role, Company company) {
 //        super(id, email, password, firstName, lastName, createdAt, updatedAt, role);
 //        this.company = company;
 //    }
 // Constructor con company
-    public Recruiter(String email, String password, String firstName, String lastName,
-                     Role role, Company company) {
-        this.setEmail(email);
-        this.setPassword(password);
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setRole(role);
-        this.company = company;
-    }
+//    public Recruiter (String email, String password, String firstName, String lastName,
+//                     String company) {
+//        super(email, password, firstName, lastName); // ✅ calls User constructor
+//        this.company = company;
+//
+//    }
+
+
+
 }

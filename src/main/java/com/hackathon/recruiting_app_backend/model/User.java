@@ -4,15 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
+@SuperBuilder
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
+//@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class User {
@@ -44,6 +46,9 @@ public abstract class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+//    public User(String email, String password, String firstName, String lastName) {
+//    }
 
     public enum Role {
         ADMIN,

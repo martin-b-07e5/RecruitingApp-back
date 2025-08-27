@@ -90,7 +90,7 @@ public class AuthService {
                 if (request.getCompanyId() != null) {
                     Company company = companyRepository.findById(request.getCompanyId())
                             .orElseThrow(() -> new RuntimeException("Company not found with id: " + request.getCompanyId()));
-                    recruiter.setCompany(company);
+                    recruiter.setCompany(company.getCompany_name());
                 }
 
                 savedUser = recruiterRepository.save(recruiter);

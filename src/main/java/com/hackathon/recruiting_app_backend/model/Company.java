@@ -20,7 +20,7 @@ public class Company {
     private Long id;
 
     @Column(name = "name")
-    private String name;
+    private String company_name;
 
     @Column(name = "description")
     private String description;
