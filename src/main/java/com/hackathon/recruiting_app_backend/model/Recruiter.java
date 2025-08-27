@@ -22,7 +22,7 @@ public class Recruiter extends User {
     // many jobOffers belong to one company
     @ManyToOne
     @JoinColumn(name = "company_id")
-    private String company;
+    private Company company;
 
     //    public Recruiter(Long id, String email, String password, String firstName, String lastName, LocalDateTime createdAt, LocalDateTime updatedAt, Role role, Company company) {
 //        super(id, email, password, firstName, lastName, createdAt, updatedAt, role);
