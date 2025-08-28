@@ -36,15 +36,4 @@ public class Candidate extends User {
     @OneToMany(mappedBy = "candidate", fetch = FetchType.LAZY)
     private Set<Application> applications = new HashSet<>();
 
-
-    // Candidate Constructor
-//    public Candidate(String email, String password, String firstName, String lastName,
-//                     String phone, String resumeFile, String skills, String experience) {
-//        super(email, password, firstName, lastName); // ✅ calls User constructor
-//        this.phone = phone;
-//        this.resumeFile = resumeFile;
-//        this.skills = skills;
-//        this.experience = experience;
-//    }
-
 }

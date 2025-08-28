@@ -24,18 +24,4 @@ public class Recruiter extends User {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    //    public Recruiter(Long id, String email, String password, String firstName, String lastName, LocalDateTime createdAt, LocalDateTime updatedAt, Role role, Company company) {
-//        super(id, email, password, firstName, lastName, createdAt, updatedAt, role);
-//        this.company = company;
-//    }
-// Constructor con company
-//    public Recruiter (String email, String password, String firstName, String lastName,
-//                     String company) {
-//        super(email, password, firstName, lastName); // ✅ calls User constructor
-//        this.company = company;
-//
-//    }
-
-
-
 }
