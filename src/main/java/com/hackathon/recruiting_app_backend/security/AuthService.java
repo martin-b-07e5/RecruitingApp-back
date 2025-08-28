@@ -4,10 +4,10 @@ import com.hackathon.recruiting_app_backend.model.Candidate;
 import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.Recruiter;
 import com.hackathon.recruiting_app_backend.model.User;
-import com.hackathon.recruiting_app_backend.repository.CandidateRepository;
+import com.hackathon.recruiting_app_backend.repository.ICandidateRepository;
 import com.hackathon.recruiting_app_backend.repository.ICompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.IUserRepository;
-import com.hackathon.recruiting_app_backend.repository.RecruiterRepository;
+import com.hackathon.recruiting_app_backend.repository.IRecruiterRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final IUserRepository userRepository;
-    private final CandidateRepository candidateRepository;
-    private final RecruiterRepository recruiterRepository;
+    private final ICandidateRepository candidateRepository;
+    private final IRecruiterRepository recruiterRepository;
     private final ICompanyRepository companyRepository;
     //    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
@@ -29,8 +29,8 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     public AuthService(IUserRepository userRepository,
-                       CandidateRepository candidateRepository,
-                       RecruiterRepository recruiterRepository,
+                       ICandidateRepository candidateRepository,
+                       IRecruiterRepository recruiterRepository,
                        ICompanyRepository companyRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
