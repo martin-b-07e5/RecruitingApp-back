@@ -1,39 +1,39 @@
-# RecruitingApp
+# 💼 RecruitingApp
 
 ## 🚀 Recruiting Platform App
 
-A full-stack recruitment platform simulating real-world job portals like LinkedIn and Indeed, built with Spring Boot
+A full-stack recruitment platform simulating real-world job portals like LinkedIn, built with Spring Boot
 backend and React frontend.
 
 ## 🎯 Project Overview
 
 This platform enables three main user types to manage recruitment processes:
 
-- **Recruiters** - Post jobs and manage applications
-- **Candidates** - Discover opportunities and track applications
-- **Administrators** - Manage users and platform operations
+- **🎯Recruiters** - Post jobs and manage applications
+- **👤Candidates** - Discover opportunities and track applications
+- **🔧Administrators** - Manage users and platform operations
 
 ## ✨ Features
 
 ### Core Functionality
 
-- ✅ **Job Management** - Create, edit, and publish job offers
-- ✅ **Application System** - Candidates can apply and track status
-- ✅ **User Management** - Role-based access control
-- ✅ **Notification System** - Real-time updates for applications
+- ✅ **Job Management** - 🎯Recruiters create, edit, and publish job offers.
+- ✅ **Application System** - 👤Candidates can apply for jobs and track status.
+- ✅ **User Management** - Role-based access control.
+- ✅ **Notification System** - Real-time updates for applications.
 
-### User Stories Implemented
+### 👥 User Stories Implemented
 
-- **As a recruiter**: I can post jobs and manage hiring processes
-- **As a candidate**: I can apply for jobs and follow my application status
-- **As an administrator**: I can manage users and platform content
+- **As a 🎯recruiter**: I can post jobs and manage hiring processes.
+- **As a 👤candidate**: I can apply for jobs and follow my application status.
+- **As an 🔧administrator**: I can manage users and platform content.
 
 ## 🛠️ Technology Stack
 
 ### Backend (Current Implementation)
 
 - **Java 21** - Programming language
-- **Spring Boot 3.5.5** - Framework
+- **Spring Boot 3.5** - Framework
 - **Spring Data JPA** - Database persistence
 - **Spring Security** - Authentication & authorization
 - **MySQL** - Database
@@ -53,63 +53,46 @@ This platform enables three main user types to manage recruitment processes:
 The database schema includes:
 
 - **Users** - Base user information with role-based access
-- **Candidates** - Extended candidate profiles
-- **Recruiters** - Recruiter and company information
 - **JobOffers** - Job postings and details
 - **Applications** - Application tracking system
+- **Companies** - Company information
 - **Notifications** - User notification system
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Java 21+
-- MySQL 9.4+
-- Maven 3.6+
-- Node.js 16+ (for frontend)
-
-### Backend Installation
-
-```bash
-cd 
-
-backend/recruiting-app
-mvn clean install
-mvn spring-boot:run
-```
-
-### Environment Configuration
-
-Create `application.properties`:
-
-```properties
-spr
-ing.datasource.url=jdbc:mysql://localhost:3306/recruiting_db
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
-```
+- **AdminLogs** - Admin logs
 
 ## 📁 Project Structure
 
 ```
-rec
-
-ruiting-platform/
-├── backend/                 # Spring Boot application
-│   ├── recruiting-app/
-│   │   ├── src/
-│   │   │   ├── main/java/com/hackathon/recruiting_app_backend/
-│   │   │   │   ├── model/      # Entity classes
-│   │   │   │   ├── repository/ # Data access layer
-│   │   │   │   ├── service/    # Business logic
-│   │   │   │   ├── controller/ # REST API endpoints
-│   │   │   │   └── config/     # Security and configuration
-│   │   │   └── resources/      # Properties and static files
-│   │   └── pom.xml            # Maven dependencies
-├── frontend/                # React application (to be implemented)
-├── database/               # SQL scripts and ER diagrams
-└── documentation/         # Project documentation
+recruiting_app_backend
+├── config
+│ ├── AdminDataLoader.java
+│ └── CompanyDataLoader.java
+├── controller
+│ └── UserController.java
+├── dto
+├── model
+│ ├── AdminLog.java
+│ ├── Application.java
+│ ├── Company.java
+│ ├── JobOffer.java
+│ ├── Notification.java
+│ ├── UserCompany.java
+│ └── User.java
+├── RecruitingAppBackendApplication.java
+├── repository
+│ ├── ICompanyRepository.java
+│ └── IUserRepository.java
+├── security
+│ ├── AuthController.java
+│ ├── AuthRequestDTO.java
+│ ├── AuthResponseDTO.java
+│ ├── AuthService.java
+│ ├── CustomUserDetailsService.java
+│ ├── JwtAuthenticationFilter.java
+│ ├── JwtUtil.java
+│ ├── RegisterRequestDTO.java
+│ └── SecurityConfig.java
+└── service
+    └── UserService.java
 ```
 
 ## 🔐 Security Features
@@ -151,15 +134,15 @@ The frontend will feature:
 
 ### 🚧 In Progress
 
-- [ ] Entity classes implementation
+- [x] Entity classes implementation
 - [ ] Repository layer development
-- [ ] Spring Security configuration
+- [x] Spring Security configuration
 - [ ] REST API endpoints
 
 ### 📅 Planned
 
 - [ ] Frontend React application
-- [ ] JWT authentication implementation
+- [x] JWT authentication implementation
 - [ ] Notification system
 - [ ] Advanced search functionality
 
@@ -189,10 +172,3 @@ This project is managed using **[Taiga](https://www.taiga.io/)** for backlog, sp
 - Spring Boot team for the excellent framework
 - Taiga for project management tools
 - The recruitment platform concept inspired by LinkedIn and Indeed
-
-## 💡 To customize your README:
-
-2. **Update progress** as you go
-3. **Include screenshots** when you have the UI
-4. **Add badges** for build status, coverage, etc.
-5. **Mention your Taiga board** if it is public
