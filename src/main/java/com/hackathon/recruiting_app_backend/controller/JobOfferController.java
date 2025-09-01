@@ -5,8 +5,9 @@ import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.IUserRepository;
-import com.hackathon.recruiting_app_backend.repository.ICompanyRepository;
+import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
 import com.hackathon.recruiting_app_backend.service.JobOfferService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,15 +22,16 @@ public class JobOfferController {
     // inject dependencies
     private final JobOfferService jobOfferService;
     private final IUserRepository userRepository;
-    private final ICompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
     // constructor
-    public JobOfferController(JobOfferService jobOfferService, IUserRepository userRepository, ICompanyRepository companyRepository) {
+    public JobOfferController(JobOfferService jobOfferService, IUserRepository userRepository, CompanyRepository companyRepository) {
         this.jobOfferService = jobOfferService;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
     }
 
+    // createJobOffer
     @PostMapping("/create")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<JobOffer> createJobOffer(
@@ -66,6 +68,13 @@ public class JobOfferController {
         return ResponseEntity.ok(savedOffer);
     }
 
+    // getAllJobOffers
+    @GetMapping("/all")
+    public ResponseEntity<List<JobOffer>> getAllJobOffers() {
+        return ResponseEntity.ok(jobOfferService.getAllJobOffers());
+    }
+
+    // getMyJobOffers
     @GetMapping("/my-job-offers")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<List<JobOffer>> getMyJobOffers(Authentication authentication) {
@@ -78,9 +87,22 @@ public class JobOfferController {
         return ResponseEntity.ok(offers);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<JobOffer>> getAllJobOffers() {
-        return ResponseEntity.ok(jobOfferService.getAllJobOffers());
+    // deleteJobOffer (Solo el reclutador que creó la oferta puede eliminarla)
+    // DELETE  http://localhost:8080/api/job-offers/11
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<?> deleteJobOffer(@PathVariable Long id) {
+        try {
+            jobOfferService.deleteJobOffer(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND) // 404
+                    .body(e.getMessage()); // Mensaje del service
+        }
     }
 
+
 }
+
+
+

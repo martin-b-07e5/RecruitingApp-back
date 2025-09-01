@@ -2,6 +2,7 @@ package com.hackathon.recruiting_app_backend.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,16 +30,16 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-//                                .anyRequest().permitAll()  // ← Temporary test
                                 .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-//                                .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")  // esto funcionaba antes
-//                                .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")  // esto funcionaba antes
-                                .requestMatchers("/api/job-offers/create").hasRole("RECRUITER")
-                                .requestMatchers("/api/job-offers/my-job-offers").hasRole("RECRUITER")
-                                .requestMatchers("/api/job-offers/all").permitAll() // Todos pueden ver
+                                .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")
 
-                                .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Solo 1 nivel: /api/job-offers/1
+
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/all").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/my-job-offers").hasRole("RECRUITER")
+
+//                                .anyRequest().permitAll()  // ← Temporary test
+                                .anyRequest().authenticated()  // for production
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
