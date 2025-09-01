@@ -32,8 +32,12 @@ public class SecurityConfig {
 //                                .anyRequest().permitAll()  // ← Temporary test
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")
-                                .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")
+//                                .requestMatchers("/api/recruiter/**").hasRole("RECRUITER")  // esto funcionaba antes
+//                                .requestMatchers("/api/candidate/**").hasRole("CANDIDATE")  // esto funcionaba antes
+                                .requestMatchers("/api/job-offers/create").hasRole("RECRUITER")
+                                .requestMatchers("/api/job-offers/my-job-offers").hasRole("RECRUITER")
+                                .requestMatchers("/api/job-offers/all").permitAll() // Todos pueden ver
+
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
