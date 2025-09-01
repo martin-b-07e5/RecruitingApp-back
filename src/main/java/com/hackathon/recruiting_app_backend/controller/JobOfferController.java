@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/job-offers")
@@ -91,13 +92,43 @@ public class JobOfferController {
     // DELETE  http://localhost:8080/api/job-offers/11
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('RECRUITER')")
-    public ResponseEntity<?> deleteJobOffer(@PathVariable Long id) {
+    public ResponseEntity<?> deleteJobOffer(
+            @PathVariable
+            Long id,
+            Authentication authentication) {
         try {
+            // 1. Get the authenticated user (recruiter)
+            String email = authentication.getName();
+            User recruiter = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Recruiter not found"));
+
+            // 2. First check if job offer EXISTS (without checking recruiter)
+            // 404 - When it doesn't exist
+            Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
+            if (jobOffer.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("❌ Job offer not found");
+            }
+
+            // 3. Then check if job offer belongs to this recruiter
+            // 403 - When you don't have permission
+            Optional<JobOffer> recruiterJobOffer = jobOfferService.getJobOfferByIdAndRecruiter(id, recruiter.getId());
+            if (recruiterJobOffer.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("⛔ You are not authorized to delete this job offer");
+            }
+
+            // 4. Delete the job offer
+            // 200 - When it is deleted
             jobOfferService.deleteJobOffer(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok()
+//                    .body("✅ Job offer deleted successfully");
+//                    .body("✅ Job offer #" + id + " deleted successfully");
+                    .body("✅ Job offer '" + jobOffer.get().getTitle() + "' (ID: " + id + ") deleted successfully");
+
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND) // 404
-                    .body(e.getMessage()); // Mensaje del service
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage()); // Message from the service.
         }
     }
 
