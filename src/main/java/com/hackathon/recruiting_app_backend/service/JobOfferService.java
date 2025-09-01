@@ -26,18 +26,18 @@ public class JobOfferService {
         return jobOfferRepository.save(jobOffer);
     }
 
-    // get job offers by recruiter
-    public List<JobOffer> getJobOffersByRecruiter(Long recruiterId) {
-        return jobOfferRepository.findByUserId(recruiterId);
-    }
-
     // get all job offers
     public List<JobOffer> getAllJobOffers() {
         return jobOfferRepository.findAll();
     }
 
+    // get job offers by recruiter
+    public List<JobOffer> getJobOffersByRecruiter(Long recruiterId) {
+        return jobOfferRepository.findByUserId(recruiterId);
+    }
+
     // --------------------
-    // getJobOfferById
+    // get job offer by id
     public Optional<JobOffer> getJobOfferById(Long id) {
         return jobOfferRepository.findById(id);
     }

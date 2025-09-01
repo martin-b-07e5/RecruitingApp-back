@@ -103,17 +103,70 @@ recruiting_app_backend
 - Protected API endpoints
 - CORS configuration
 
-## API Endpoints (Planned)
+## 🔑 Test Users & Authentication
 
-| Method | Endpoint            | Description         | Access    |
-|--------|---------------------|---------------------|-----------|
-| POST   | `/api/auth/login`   | User authentication | Public    |
-| GET    | `/api/jobs`         | List job offers     | Public    |
-| POST   | `/api/jobs`         | Create job offer    | Recruiter |
-| POST   | `/api/applications` | Submit application  | Candidate |
-| GET    | `/api/users`        | List users          | Admin     |
+### Pre-loaded Test Users (Auto-created on first run)
 
-## 🎨 Frontend Preview (Upcoming)
+**Admin User:**
+
+- Email: `admin@recruitingapp.com`
+- Password: `password123`
+- Role: `ADMIN`
+
+**Recruiter User:**
+
+- Email: `recruiter@google.com`
+- Password: `password123`
+- Role: `RECRUITER`
+
+**Candidate User:**
+
+- Email: `candidate@example.com`
+- Password: `password123`
+- Role: `CANDIDATE`
+- Skills: Java, Spring, React
+
+### Obtaining JWT Tokens
+
+**1. Login Endpoint:**
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "recruiter@google.com",
+  "password": "password123"
+}
+```
+
+**2. Response:**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "email": "recruiter@google.com",
+  "role": "RECRUITER"
+}
+```
+
+**3. Using Tokens:**
+
+```http
+Authorization: Bearer your_jwt_token_here
+```
+
+## API Endpoints
+
+| Method | Endpoint                        | Description             | Access            |
+|--------|---------------------------------|-------------------------|-------------------|
+| POST   | `/api/auth/login`               | User authentication     | Public            |
+| POST   | `/api/auth/register`            | User registration       | Public            |
+| POST   | `/api/job-offers/create`        | Create job offer        | Recruiter         |C
+| GET    | `/api/job-offers/all`           | List all job offers     | Public            |R
+| GET    | `/api/job-offers/my-job-offers` | Get recruiter's jobs    | Recruiter         |
+| UPADTE | `/api/job-offers/update`        | Update recruiter's jobs | Recruiter         |U
+| DELETE | `/api/job-offers/{id}`          | Delete job offer        | Recruiter (owner) |D
 
 The frontend will feature:
 
