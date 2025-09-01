@@ -1,6 +1,7 @@
 package com.hackathon.recruiting_app_backend.controller;
 
 import com.hackathon.recruiting_app_backend.dto.JobOfferRequestDTO;
+import com.hackathon.recruiting_app_backend.dto.JobOfferResponseDTO;
 import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
@@ -65,7 +66,8 @@ public class JobOfferController {
 
             // 5. Save
             JobOffer savedOffer = jobOfferService.createJobOffer(jobOffer, recruiter, company);
-            return ResponseEntity.ok(savedOffer);
+//            return ResponseEntity.ok(savedOffer.getId());
+            return ResponseEntity.ok(JobOfferResponseDTO.fromEntityxx(savedOffer));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("❌ " + e.getMessage()); // Error message
