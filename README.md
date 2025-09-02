@@ -1,8 +1,21 @@
-# 💼 RecruitingApp
+# Hackathon ONE
 
-## 🚀 Recruiting Platform App
+Hackathon Tech Advanced - Oracle Next Education (ONE)
 
-A full-stack recruitment platform simulating real-world job portals like LinkedIn, built with Spring Boot
+🚀 ✨ Solve real challenges, demonstrate your technical skills, work
+as a team, and create innovative solutions while expanding your network.
+
+✨ Solve real challenges, demonstrate your technical skills, work as a team, and create innovative solutions while
+expanding your network.
+Web App Development
+
+📅August 18, 2025 - September 22, 2025
+
+---
+
+# 💼 Recruiting Platform App
+
+🚀 A full-stack recruitment platform simulating real-world job portals like LinkedIn, built with Spring Boot
 backend and React frontend.
 
 ## 👥 User Stories Implemented
@@ -69,8 +82,11 @@ recruiting_app_backend
 │ ├── AdminDataLoader.java
 │ └── CompanyDataLoader.java
 ├── controller
+│ ├── JobOfferController.java
 │ └── UserController.java
 ├── dto
+│ ├── JobOfferRequestDTO.java
+│ └── JobOfferResponseDTO.java
 ├── model
 │ ├── AdminLog.java
 │ ├── Application.java
@@ -81,8 +97,9 @@ recruiting_app_backend
 │ └── User.java
 ├── RecruitingAppBackendApplication.java
 ├── repository
-│ ├── ICompanyRepository.java
-│ └── IUserRepository.java
+│ ├── CompanyRepository.java
+│ ├── IUserRepository.java
+│ └── JobOfferRepository.java
 ├── security
 │ ├── AuthController.java
 │ ├── AuthRequestDTO.java
@@ -94,6 +111,7 @@ recruiting_app_backend
 │ ├── RegisterRequestDTO.java
 │ └── SecurityConfig.java
 └── service
+    ├── JobOfferService.java
     └── UserService.java
 ```
 
@@ -185,13 +203,3 @@ Content-Type: application/json
 ```http
 Authorization: Bearer your_jwt_token_here
 ```
-
----
-
-## 🤝 Contributing
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
