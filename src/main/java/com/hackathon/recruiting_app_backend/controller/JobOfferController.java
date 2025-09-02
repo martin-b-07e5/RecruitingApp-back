@@ -34,9 +34,10 @@ public class JobOfferController {
         this.companyRepository = companyRepository;
     }
 
-    // createJobOffer
+    // createJobOffer (Recruiters can post new job opportunities)
     @PostMapping("/create")
     @PreAuthorize("hasRole('RECRUITER')")
+    // POST http://localhost:8080/api/job-offers/create
     public ResponseEntity<?> createJobOffer(@RequestBody JobOfferRequestDTO jobOfferRequestDTO, Authentication authentication) {
         // Change JobOffer to <?> to handle errors
 
@@ -76,7 +77,7 @@ public class JobOfferController {
 
     }
 
-    // getAllJobOffers
+    // getAllJobOffers (Anyone can view job offers (no login required))
     @GetMapping("/getAllJobOffers")
     // GET http://localhost:8080/api/job-offers/getAllJobOffers
     public ResponseEntity<?> getAllJobOffers() {
@@ -100,21 +101,7 @@ public class JobOfferController {
         }
     }
 
-    // getMyJobOffers
-    @GetMapping("/getMyJobOffers")
-    @PreAuthorize("hasRole('RECRUITER')")
-    // GET http://localhost:8080/api/job-offers/getMyJobOffers
-    public ResponseEntity<List<JobOffer>> getMyJobOffers(Authentication authentication) {
-        // Get recruiter ID from authentication
-        String email = authentication.getName();
-        User recruiter = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Recruiter not found"));
-
-        List<JobOffer> offers = jobOfferService.getJobOffersByRecruiter(recruiter.getId());
-        return ResponseEntity.ok(offers);
-    }
-
-    // getJobOfferById
+    // getJobOfferById (Anyone can view job offers (no login required))
     @GetMapping("/getJobOfferById/{id}")
     // GET http://localhost:8080/api/job-offers/getJobOfferById/1
     public ResponseEntity<?> getJobOfferById(@PathVariable Long id) {
@@ -136,14 +123,37 @@ public class JobOfferController {
 
     }
 
+    // getMyJobOffers (Only the recruiter who created the offer can view it)
+    @GetMapping("/getMyJobOffers")
+    @PreAuthorize("hasRole('RECRUITER')")
+    // GET http://localhost:8080/api/job-offers/getMyJobOffers
+    public ResponseEntity<?> getMyJobOffers(Authentication authentication) {
+        try {
+            // Get recruiter UNIQUE KEY from authentication
+            String email = authentication.getName();
+            User recruiter = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Recruiter not found"));
+
+            List<JobOffer> offers = jobOfferService.getJobOffersByRecruiter(recruiter.getId());
+
+            // convert each JobOffer to JobOfferResponseDTO
+            List<JobOfferResponseDTO> jobOfferResponseDTOs = offers.stream()
+                    .map(JobOfferResponseDTO::fromEntity)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(jobOfferResponseDTOs);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving job offers: " + e.getMessage());
+        }
+    }
+
     // deleteJobOffer (Only the recruiter who created the offer can delete it)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('RECRUITER')")
     // DELETE  http://localhost:8080/api/job-offers/11
-    public ResponseEntity<?> deleteJobOffer(
-            @PathVariable
-            Long id,
-            Authentication authentication) {
+    public ResponseEntity<?> deleteJobOffer(@PathVariable Long id, Authentication authentication) {
         try {
             // 1. Get the authenticated user (recruiter)
             String email = authentication.getName();

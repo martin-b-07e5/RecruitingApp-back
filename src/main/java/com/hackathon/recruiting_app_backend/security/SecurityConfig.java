@@ -33,14 +33,14 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")
+                                .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
 
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
 //                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").authenticated() // → Any logged-in user can view job offers
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll()  // → Anyone can view job offers (no login required)
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
 
-                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Solo 1 nivel: /api/job-offers/1
+                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Only 1 level: /api/job-offers/1
 
 //                                .anyRequest().permitAll()  // ← Temporary test
                                 .anyRequest().authenticated()  // for production
