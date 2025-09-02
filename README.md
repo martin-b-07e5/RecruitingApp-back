@@ -5,15 +5,23 @@
 A full-stack recruitment platform simulating real-world job portals like LinkedIn, built with Spring Boot
 backend and React frontend.
 
-## 🎯 Project Overview
+## 👥 User Stories Implemented
 
-This platform enables three main user types to manage recruitment processes:
+- **As a 🎯recruiter**: I can post jobs and manage hiring processes.
+- **As a 👤candidate**: I can apply for jobs and follow my application status.
+- **As an 🔧administrator**: I can manage users and platform content.
 
-- **🎯Recruiters** - Post jobs and manage applications
-- **👤Candidates** - Discover opportunities and track applications
-- **🔧Administrators** - Manage users and platform operations
+## ✨ Essential Features
 
-## ✨ Features
+- Job posting and candidate management.
+- Applications and follow-up.
+- User management.
+
+## 👥 User Types
+
+- 🎯Recruiters.
+- 👤Candidates.
+- 🔧Administrators.
 
 ### Core Functionality
 
@@ -21,12 +29,6 @@ This platform enables three main user types to manage recruitment processes:
 - ✅ **Application System** - 👤Candidates can apply for jobs and track status.
 - ✅ **User Management** - Role-based access control.
 - ✅ **Notification System** - Real-time updates for applications.
-
-### 👥 User Stories Implemented
-
-- **As a 🎯recruiter**: I can post jobs and manage hiring processes.
-- **As a 👤candidate**: I can apply for jobs and follow my application status.
-- **As an 🔧administrator**: I can manage users and platform content.
 
 ## 🛠️ Technology Stack
 
@@ -103,6 +105,34 @@ recruiting_app_backend
 - Protected API endpoints
 - CORS configuration
 
+## API Endpoints
+
+| Method | Endpoint                            | Description             | Access            |
+|--------|-------------------------------------|-------------------------|-------------------|
+| POST   | `/api/auth/register`                | User registration       | Public            |
+| POST   | `/api/auth/login`                   | User authentication     | Public            |
+| POST   | `/api/job-offers/create`            | Create job offer        | Recruiter         |
+| GET    | `/api/job-offers/getAllJobOffers`   | List all job offers     | Public            |
+| GET    | `/api/job-offers/getJobOfferById/7` | List job offer by id    | Public            |
+| GET    | `/api/job-offers/getMyJobOffers`    | Get recruiter's jobs    | Recruiter         |
+| DELETE | `/api/job-offers/{id}`              | Delete job offer        | Recruiter (owner) |
+| UPADTE | `/api/job-offers/update`            | Update recruiter's jobs | Recruiter         |
+
+## 📌 Project Management
+
+This project is managed using **[Taiga](https://www.taiga.io/)** for backlog, sprints, and epics tracking.
+
+- 📋 [Backlog](https://tree.taiga.io/project/martinbergagno-recruitingapp/backlog)
+- 🗂️ [Epics](https://tree.taiga.io/project/martinbergagno-recruitingapp/epics)
+- 🏃 Sprint Boards available per iteration
+
+## 📄 License
+
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0).  
+See the [LICENSE](LICENSE) file for details.
+
+---
+
 ## 🔑 Test Users & Authentication
 
 ### Pre-loaded Test Users (Auto-created on first run)
@@ -156,48 +186,7 @@ Content-Type: application/json
 Authorization: Bearer your_jwt_token_here
 ```
 
-## API Endpoints
-
-| Method | Endpoint                        | Description             | Access            |
-|--------|---------------------------------|-------------------------|-------------------|
-| POST   | `/api/auth/login`               | User authentication     | Public            |
-| POST   | `/api/auth/register`            | User registration       | Public            |
-| POST   | `/api/job-offers/create`        | Create job offer        | Recruiter         |C
-| GET    | `/api/job-offers/all`           | List all job offers     | Public            |R
-| GET    | `/api/job-offers/my-job-offers` | Get recruiter's jobs    | Recruiter         |
-| UPADTE | `/api/job-offers/update`        | Update recruiter's jobs | Recruiter         |U
-| DELETE | `/api/job-offers/{id}`          | Delete job offer        | Recruiter (owner) |D
-
-The frontend will feature:
-
-- Responsive design for desktop and mobile
-- Interactive dashboards for each user type
-- Real-time notification system
-- Advanced job search and filtering
-- Application status tracking
-
-## 📋 Development Progress
-
-### ✅ Completed
-
-- [x] Project setup with Spring Initializr
-- [x] Basic Spring Boot configuration
-- [x] Database schema design (ERD)
-- [x] Maven dependencies configuration
-
-### 🚧 In Progress
-
-- [x] Entity classes implementation
-- [ ] Repository layer development
-- [x] Spring Security configuration
-- [ ] REST API endpoints
-
-### 📅 Planned
-
-- [ ] Frontend React application
-- [x] JWT authentication implementation
-- [ ] Notification system
-- [ ] Advanced search functionality
+---
 
 ## 🤝 Contributing
 
@@ -206,22 +195,3 @@ The frontend will feature:
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the GNU General Public License v3.0 (GPL-3.0).  
-See the [LICENSE](LICENSE) file for details.
-
-## 📌 Project Management
-
-This project is managed using **[Taiga](https://www.taiga.io/)** for backlog, sprints, and epics tracking.
-
-- 📋 [Backlog](https://tree.taiga.io/project/martinbergagno-recruitingapp/backlog)
-- 🗂️ [Epics](https://tree.taiga.io/project/martinbergagno-recruitingapp/epics)
-- 🏃 Sprint Boards available per iteration
-
-## 🙏 Acknowledgments
-
-- Spring Boot team for the excellent framework
-- Taiga for project management tools
-- The recruitment platform concept inspired by LinkedIn and Indeed
