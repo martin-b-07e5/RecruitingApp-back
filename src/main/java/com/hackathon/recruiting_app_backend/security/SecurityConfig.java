@@ -37,7 +37,6 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")
-
 //                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").authenticated() // → Any logged-in user can view job offers
                                 .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll()  // → Anyone can view job offers (no login required)
 

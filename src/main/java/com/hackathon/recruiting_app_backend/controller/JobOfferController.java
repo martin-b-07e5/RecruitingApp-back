@@ -67,7 +67,7 @@ public class JobOfferController {
             // 5. Save
             JobOffer savedOffer = jobOfferService.createJobOffer(jobOffer, recruiter, company);
 //            return ResponseEntity.ok(savedOffer.getId());
-            return ResponseEntity.ok(JobOfferResponseDTO.fromEntityxx(savedOffer));
+            return ResponseEntity.ok(JobOfferResponseDTO.fromEntity(savedOffer));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("❌ " + e.getMessage()); // Error message
@@ -76,14 +76,14 @@ public class JobOfferController {
     }
 
     // getAllJobOffers
-    // GET http://localhost:8080/api/job-offers/all
+    // GET http://localhost:8080/api/job-offers/getAllJobOffers
     @GetMapping("/getAllJobOffers")
     public ResponseEntity<List<JobOffer>> getAllJobOffers() {
         return ResponseEntity.ok(jobOfferService.getAllJobOffers());
     }
 
     // getMyJobOffers
-    // GET http://localhost:8080/api/job-offers/my-job-offers
+    // GET http://localhost:8080/api/job-offers/getMyJobOffers
     @GetMapping("/getMyJobOffers")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<List<JobOffer>> getMyJobOffers(Authentication authentication) {
@@ -109,7 +109,7 @@ public class JobOfferController {
             }
 
             // Use DTO to avoid circular JSON
-            return ResponseEntity.ok(JobOfferResponseDTO.fromEntityxx(jobOffer.get()));
+            return ResponseEntity.ok(JobOfferResponseDTO.fromEntity(jobOffer.get()));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

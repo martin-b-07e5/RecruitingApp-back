@@ -18,7 +18,7 @@ public record JobOfferResponseDTO(
      * Factory method to convert JobOffer entity to Response DTO
      * Avoids circular references and exposes only necessary data
      */
-    public static JobOfferResponseDTO fromEntityxx(JobOffer jobOffer) {
+    public static JobOfferResponseDTO fromEntity(JobOffer jobOffer) {
         return new JobOfferResponseDTO(
                 jobOffer.getId(),
                 jobOffer.getTitle(),
