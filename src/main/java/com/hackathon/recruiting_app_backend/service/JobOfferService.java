@@ -1,5 +1,6 @@
 package com.hackathon.recruiting_app_backend.service;
 
+import com.hackathon.recruiting_app_backend.dto.JobOfferUpdateDTO;
 import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
@@ -36,7 +37,6 @@ public class JobOfferService {
         return jobOfferRepository.findByUserId(recruiterId);
     }
 
-    // --------------------
     // get job offer by id
     public Optional<JobOffer> getJobOfferById(Long id) {
         return jobOfferRepository.findById(id);
@@ -54,7 +54,20 @@ public class JobOfferService {
         }
         jobOfferRepository.deleteById(id);
     }
-    // --------------------
+
+    // update job offer (using JobOfferUpdateDTO.java)
+    public JobOffer updateJobOffer(Long id, JobOfferUpdateDTO jobOfferUpdateDTO, Long recruiterId) {
+        JobOffer jobOffer = jobOfferRepository.findByIdAndUserId(id, recruiterId)
+                .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found"));
+
+        jobOffer.setTitle(jobOfferUpdateDTO.title());
+        jobOffer.setDescription(jobOfferUpdateDTO.description());
+        jobOffer.setLocation(jobOfferUpdateDTO.location());
+        jobOffer.setSalary(jobOfferUpdateDTO.salary());
+        jobOffer.setEmploymentType(jobOfferUpdateDTO.employmentType());
+
+        return jobOfferRepository.save(jobOffer);
+    }
 
 
 }

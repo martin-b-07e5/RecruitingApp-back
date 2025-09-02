@@ -66,6 +66,7 @@ public class JobOffer {
     @OneToMany(mappedBy = "jobOffer")
     private Set<Application> applications;
 
+    // Inverse relationship in JobOffer with User
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;  // Each job offer is created by one recruiter

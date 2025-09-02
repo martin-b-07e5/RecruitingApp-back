@@ -2,13 +2,11 @@ package com.hackathon.recruiting_app_backend.dto;
 
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 
-// POST http://localhost:8080/api/job-offers/create
-public record JobOfferRequestDTO(
+public record JobOfferUpdateDTO(
         String title,
         String description,
         String location,
         String salary,
-        JobOffer.EmploymentType employmentType,
-        Long companyId
+        JobOffer.EmploymentType employmentType
 ) {
 }
