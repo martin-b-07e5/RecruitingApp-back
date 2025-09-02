@@ -77,14 +77,14 @@ public class JobOfferController {
 
     // getAllJobOffers
     // GET http://localhost:8080/api/job-offers/all
-    @GetMapping("/all")
+    @GetMapping("/getAllJobOffers")
     public ResponseEntity<List<JobOffer>> getAllJobOffers() {
         return ResponseEntity.ok(jobOfferService.getAllJobOffers());
     }
 
     // getMyJobOffers
     // GET http://localhost:8080/api/job-offers/my-job-offers
-    @GetMapping("/my-job-offers")
+    @GetMapping("/getMyJobOffers")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<List<JobOffer>> getMyJobOffers(Authentication authentication) {
         // Get recruiter ID from authentication
@@ -94,6 +94,28 @@ public class JobOfferController {
 
         List<JobOffer> offers = jobOfferService.getJobOffersByRecruiter(recruiter.getId());
         return ResponseEntity.ok(offers);
+    }
+
+    // getJobOfferById
+    // GET http://localhost:8080/api/job-offers/getJobOfferById/1
+    @GetMapping("/getJobOfferById/{id}")
+    public ResponseEntity<?> getJobOfferById(@PathVariable Long id) {
+        try {
+            Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
+
+            if (jobOffer.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("❌ Job offer not found");
+            }
+
+            // Use DTO to avoid circular JSON
+            return ResponseEntity.ok(JobOfferResponseDTO.fromEntityxx(jobOffer.get()));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving job offer: " + e.getMessage());
+        }
+
     }
 
     // deleteJobOffer (Only the recruiter who created the offer can delete it)
