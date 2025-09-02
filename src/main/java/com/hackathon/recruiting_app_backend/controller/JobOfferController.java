@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/job-offers")
@@ -36,8 +37,8 @@ public class JobOfferController {
     // createJobOffer
     @PostMapping("/create")
     @PreAuthorize("hasRole('RECRUITER')")
-    // Change JobOffer to <?> to handle errors
     public ResponseEntity<?> createJobOffer(@RequestBody JobOfferRequestDTO jobOfferRequestDTO, Authentication authentication) {
+        // Change JobOffer to <?> to handle errors
 
         try {
             // 1. Get the authenticated user (recruiter)
@@ -76,16 +77,33 @@ public class JobOfferController {
     }
 
     // getAllJobOffers
-    // GET http://localhost:8080/api/job-offers/getAllJobOffers
     @GetMapping("/getAllJobOffers")
-    public ResponseEntity<List<JobOffer>> getAllJobOffers() {
-        return ResponseEntity.ok(jobOfferService.getAllJobOffers());
+    // GET http://localhost:8080/api/job-offers/getAllJobOffers
+    public ResponseEntity<?> getAllJobOffers() {
+        try {
+
+//            ⚠️ FORCE ERROR - Add this line and comment out until the beginning of the catch:
+//            throw new RuntimeException("🔥 Error de prueba en getAllJobOffers");
+
+            List<JobOffer> jobOffers = jobOfferService.getAllJobOffers();
+
+            // convert each JobOffer to JobOfferResponseDTO
+            List<JobOfferResponseDTO> jobOfferResponseDTOs = jobOffers.stream()
+                    .map(JobOfferResponseDTO::fromEntity)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(jobOfferResponseDTOs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving job offers: " + e.getMessage());
+        }
     }
 
     // getMyJobOffers
-    // GET http://localhost:8080/api/job-offers/getMyJobOffers
     @GetMapping("/getMyJobOffers")
     @PreAuthorize("hasRole('RECRUITER')")
+    // GET http://localhost:8080/api/job-offers/getMyJobOffers
     public ResponseEntity<List<JobOffer>> getMyJobOffers(Authentication authentication) {
         // Get recruiter ID from authentication
         String email = authentication.getName();
@@ -97,8 +115,8 @@ public class JobOfferController {
     }
 
     // getJobOfferById
-    // GET http://localhost:8080/api/job-offers/getJobOfferById/1
     @GetMapping("/getJobOfferById/{id}")
+    // GET http://localhost:8080/api/job-offers/getJobOfferById/1
     public ResponseEntity<?> getJobOfferById(@PathVariable Long id) {
         try {
             Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
@@ -119,9 +137,9 @@ public class JobOfferController {
     }
 
     // deleteJobOffer (Only the recruiter who created the offer can delete it)
-    // DELETE  http://localhost:8080/api/job-offers/11
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('RECRUITER')")
+    // DELETE  http://localhost:8080/api/job-offers/11
     public ResponseEntity<?> deleteJobOffer(
             @PathVariable
             Long id,
