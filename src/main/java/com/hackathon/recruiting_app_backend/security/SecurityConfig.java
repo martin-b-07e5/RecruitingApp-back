@@ -35,10 +35,12 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")
 
-                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Solo 1 nivel: /api/job-offers/1
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")
+//                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").authenticated() // → Any logged-in user can view job offers
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll()  // → Anyone can view job offers (no login required)
 
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/all").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/my-job-offers").hasRole("RECRUITER")
+                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Solo 1 nivel: /api/job-offers/1
 
 //                                .anyRequest().permitAll()  // ← Temporary test
                                 .anyRequest().authenticated()  // for production
