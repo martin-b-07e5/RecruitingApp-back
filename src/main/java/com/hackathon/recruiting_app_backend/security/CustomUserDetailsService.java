@@ -1,7 +1,7 @@
 package com.hackathon.recruiting_app_backend.security;
 
 import com.hackathon.recruiting_app_backend.model.User;
-import com.hackathon.recruiting_app_backend.repository.IUserRepository;
+import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final IUserRepository IUserRepository;
+    private final UserRepository UserRepository;
 
-    public CustomUserDetailsService(IUserRepository userRepository) {
-        this.IUserRepository = userRepository;
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.UserRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = IUserRepository.findByEmail(email)
+        User user = UserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return org.springframework.security.core.userdetails.User.builder()

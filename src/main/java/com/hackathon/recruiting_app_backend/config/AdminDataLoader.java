@@ -1,7 +1,7 @@
 package com.hackathon.recruiting_app_backend.config;
 
 import com.hackathon.recruiting_app_backend.model.User;
-import com.hackathon.recruiting_app_backend.repository.IUserRepository;
+import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminDataLoader implements CommandLineRunner {
 
-    private final IUserRepository userRepository; // ✅ Cambiar por UserRepository
+    private final UserRepository userRepository; // ✅ Cambiar por UserRepository
     private final PasswordEncoder passwordEncoder;
 
     @Override

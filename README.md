@@ -98,7 +98,7 @@ recruiting_app_backend
 ├── RecruitingAppBackendApplication.java
 ├── repository
 │ ├── CompanyRepository.java
-│ ├── IUserRepository.java
+│ ├── UserRepository.java
 │ └── JobOfferRepository.java
 ├── security
 │ ├── AuthController.java

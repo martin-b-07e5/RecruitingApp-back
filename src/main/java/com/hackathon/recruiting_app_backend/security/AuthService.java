@@ -2,7 +2,7 @@ package com.hackathon.recruiting_app_backend.security;
 
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
-import com.hackathon.recruiting_app_backend.repository.IUserRepository;
+import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    private final IUserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public AuthService(IUserRepository userRepository,
+    public AuthService(UserRepository userRepository,
                        CompanyRepository companyRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,

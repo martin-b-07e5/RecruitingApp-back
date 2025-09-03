@@ -6,7 +6,7 @@ import com.hackathon.recruiting_app_backend.dto.JobOfferUpdateDTO;
 import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
-import com.hackathon.recruiting_app_backend.repository.IUserRepository;
+import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
 import com.hackathon.recruiting_app_backend.service.JobOfferService;
 import org.springframework.http.HttpStatus;
@@ -25,11 +25,11 @@ public class JobOfferController {
 
     // inject dependencies
     private final JobOfferService jobOfferService;
-    private final IUserRepository userRepository;
+    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
 
     // constructor
-    public JobOfferController(JobOfferService jobOfferService, IUserRepository userRepository, CompanyRepository companyRepository) {
+    public JobOfferController(JobOfferService jobOfferService, UserRepository userRepository, CompanyRepository companyRepository) {
         this.jobOfferService = jobOfferService;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
@@ -150,42 +150,6 @@ public class JobOfferController {
         }
     }
 
-    // deleteJobOffer (Only the recruiter who created the offer can delete it)
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('RECRUITER')")
-    // DELETE  http://localhost:8080/api/job-offers/11
-    public ResponseEntity<?> deleteJobOffer(@PathVariable Long id, Authentication authentication) {
-        try {
-            // 1. Get the authenticated user (recruiter)
-            String email = authentication.getName();
-            User recruiter = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("Recruiter not found"));
-
-            // 2. First check if job offer EXISTS (without checking recruiter). 404 - When it doesn't exist
-            Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
-            if (jobOffer.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("❌ Job offer not found");
-            }
-
-            // 3. Then check if job offer belongs to this recruiter. 403 - When you don't have permission
-            Optional<JobOffer> recruiterJobOffer = jobOfferService.getJobOfferByIdAndRecruiter(id, recruiter.getId());
-            if (recruiterJobOffer.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("⛔ You are not authorized to delete this job offer");
-            }
-
-            // 4. Delete the job offer. 200 - When it is deleted
-            jobOfferService.deleteJobOffer(id);
-            return ResponseEntity.ok()
-                    .body("✅ Job offer '" + jobOffer.get().getTitle() + "' (ID: " + id + ") deleted successfully");
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage()); // Message from the service.
-        }
-    }
-
     // updateJobOffer (Recruiter who created it OR Admin can update)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
@@ -226,5 +190,47 @@ public class JobOfferController {
         }
     }
 
+    // deleteJobOffer (Only the recruiter who created the offer can delete it)
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('RECRUITER' or hasRole('ADMIN')")
+    // DELETE  http://localhost:8080/api/job-offers/11
+    public ResponseEntity<?> deleteJobOffer(@PathVariable Long id, Authentication authentication) {
+        try {
+            // 1. Get the authenticated user (user)
+            String email = authentication.getName();
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User (admin | recruiter) not found"));
+
+            // 2. First check if job offer EXISTS (without checking user). 404 - When it doesn't exist
+            Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
+            if (jobOffer.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("❌ Job offer not found");
+            }
+
+            // 3. If user is ADMIN, skip ownership check
+            if (user.getRole() == User.Role.ADMIN) {
+                jobOfferService.deleteJobOffer(id);
+                return ResponseEntity.ok()
+                        .body("✅ Job offer '" + jobOffer.get().getTitle() + "' (ID: " + id + ") deleted successfully by admin");
+            }
+
+            // 4. Then check if job offer belongs to this user. 403 - When you don't have permission
+            Optional<JobOffer> recruiterJobOffer = jobOfferService.getJobOfferByIdAndRecruiter(id, user.getId());
+            if (recruiterJobOffer.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("⛔ You are not authorized to delete this job offer");
+            }
+
+            // 5. Delete the job offer. 200 - When it is deleted
+            jobOfferService.deleteJobOffer(id);
+            return ResponseEntity.ok()
+                    .body("✅ Job offer '" + jobOffer.get().getTitle() + "' (ID: " + id + ") deleted successfully");
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage()); // Message from the service.
+        }
+    }
 
 }

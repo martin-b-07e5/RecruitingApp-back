@@ -212,7 +212,6 @@ public class JwtUtil {
 package com.hackathon.recruiting_app_backend.security;
 
 import com.hackathon.recruiting_app_backend.model.User;
-import com.hackathon.recruiting_app_backend.repository.IUserRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -222,15 +221,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final IUserRepository IUserRepository;
+    private final UserRepository UserRepository;
 
-    public CustomUserDetailsService(IUserRepository IUserRepository) {
-        this.IUserRepository = IUserRepository;
+    public CustomUserDetailsService(UserRepository UserRepository) {
+        this.UserRepository = UserRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = IUserRepository.findByEmail(email)
+        User user = UserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return org.springframework.security.core.userdetails.User.builder()
@@ -253,7 +252,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 ---
 
-# 🔐 **IUserRepository.java update**
+# 🔐 **UserRepository.java update**
 
 ```java
 package com.hackathon.recruiting_app_backend.repository;
@@ -265,7 +264,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);

@@ -32,22 +32,18 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
 
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
-//                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").authenticated() // → Any logged-in user can view job offers
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
+                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
+                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
+                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
 
-                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Only 1 level: /api/job-offers/1
+                        .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
 
-//                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/*").hasRole("RECRUITER") // Only 1 level: /api/job-offers/1
-//                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
 
-//                                .anyRequest().permitAll()  // ← Temporary test
-                                .anyRequest().authenticated()  // for production
+                        .anyRequest().authenticated()  // for production
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
