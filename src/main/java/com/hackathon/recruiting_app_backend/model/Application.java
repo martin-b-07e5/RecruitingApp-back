@@ -54,6 +54,4 @@ public class Application {
     @JoinColumn(name = "candidate_id")
     private User candidate;  // Each application belongs to one candidate (👤 Who applies)
 
-//    
-
 }
