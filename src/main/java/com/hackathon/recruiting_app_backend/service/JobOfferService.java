@@ -66,11 +66,8 @@ public class JobOfferService {
         } else {
             // RECRUITER mode - ownership check
             jobOffer = jobOfferRepository.findByIdAndUserId(id, userId)
-                    .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found or not owned by use"));
+                    .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " NOT FOUND"));
         }
-
-//        jobOffer = jobOfferRepository.findByIdAndUserId(id, userId)
-//                .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found"));
 
         // Update fields
         jobOffer.setTitle(jobOfferUpdateDTO.title());
@@ -81,6 +78,5 @@ public class JobOfferService {
 
         return jobOfferRepository.save(jobOffer);
     }
-
 
 }

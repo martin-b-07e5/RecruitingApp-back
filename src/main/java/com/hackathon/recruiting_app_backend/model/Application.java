@@ -20,6 +20,9 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "cover_letter", columnDefinition = "TEXT")
+    private String coverLetter;
+
     @CreationTimestamp
     @Column(name = "applied_at", updatable = false)
     private LocalDateTime appliedAt;
@@ -45,11 +48,11 @@ public class Application {
     // Inverse relationship in Application with JobOffer
     @ManyToOne
     @JoinColumn(name = "job_offer_id")
-    private JobOffer jobOffer; // Each application is for one job offer
+    private JobOffer jobOffer; // Each application is for one job offer (🎯 For which job)
 
     @ManyToOne
     @JoinColumn(name = "candidate_id")
-    private User candidate;  // Each application belongs to one candidate
+    private User candidate;  // Each application belongs to one candidate (👤 Who applies)
 
 //    
 
