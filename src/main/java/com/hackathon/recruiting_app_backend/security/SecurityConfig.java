@@ -42,7 +42,9 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasRole("RECRUITER") // Only 1 level: /api/job-offers/1
 
-                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/*").hasRole("RECRUITER") // Only 1 level: /api/job-offers/1
+//                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/*").hasRole("RECRUITER") // Only 1 level: /api/job-offers/1
+//                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
 
 //                                .anyRequest().permitAll()  // ← Temporary test
                                 .anyRequest().authenticated()  // for production

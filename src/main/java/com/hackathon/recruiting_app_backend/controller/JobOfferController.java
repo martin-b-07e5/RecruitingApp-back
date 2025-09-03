@@ -186,16 +186,16 @@ public class JobOfferController {
         }
     }
 
-    // updateJobOffer (Only the recruiter who created the offer can update it)
+    // updateJobOffer (Recruiter who created it OR Admin can update)
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('RECRUITER')")
+    @PreAuthorize("hasRole('RECRUITER') or hasRole('ADMIN')")
 //     PUT http://localhost:8080/api/job-offers/1
     public ResponseEntity<?> updateJobOffer(@PathVariable Long id, @RequestBody JobOfferUpdateDTO jobOfferUpdateDTO, Authentication authentication) {
         try {
             // 1. Get the authenticated user (recruiter)
             String email = authentication.getName();
-            User recruiter = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("Recruiter not found"));
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User (admin | recruiter) not found"));
 
             // 2. First check if job offer EXISTS (without checking recruiter). 404 - When it doesn't exist
             Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
@@ -204,15 +204,21 @@ public class JobOfferController {
                         .body("❌ Job offer not found");
             }
 
-            // 3. Then check if job offer belongs to this recruiter. 403 - When you don't have permission
-            Optional<JobOffer> recruiterJobOffer = jobOfferService.getJobOfferByIdAndRecruiter(id, recruiter.getId());
+            // 3. If user is ADMIN, skip ownership check
+            if (user.getRole() == User.Role.ADMIN) {
+                JobOffer updatedJobOffer = jobOfferService.updateJobOffer(id, jobOfferUpdateDTO, null);
+                return ResponseEntity.ok(JobOfferResponseDTO.fromEntity(updatedJobOffer));
+            }
+
+            // 4. If user is RECRUITER, Then check if job offer belongs to this recruiter. 403 - When you don't have permission
+            Optional<JobOffer> recruiterJobOffer = jobOfferService.getJobOfferByIdAndRecruiter(id, user.getId());
             if (recruiterJobOffer.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("⛔ You are not authorized to update this job offer");
             }
 
-            // 4. Update the job offer. 200 - When it is updated
-            JobOffer updatedJobOffer = jobOfferService.updateJobOffer(id, jobOfferUpdateDTO, recruiter.getId());
+            // 5. Update the job offer. 200 - When it is updated
+            JobOffer updatedJobOffer = jobOfferService.updateJobOffer(id, jobOfferUpdateDTO, user.getId());
             return ResponseEntity.ok(JobOfferResponseDTO.fromEntity(updatedJobOffer));
 
         } catch (RuntimeException e) {

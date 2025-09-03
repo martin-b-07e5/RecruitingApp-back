@@ -56,10 +56,23 @@ public class JobOfferService {
     }
 
     // update job offer (using JobOfferUpdateDTO.java)
-    public JobOffer updateJobOffer(Long id, JobOfferUpdateDTO jobOfferUpdateDTO, Long recruiterId) {
-        JobOffer jobOffer = jobOfferRepository.findByIdAndUserId(id, recruiterId)
-                .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found"));
+    public JobOffer updateJobOffer(Long id, JobOfferUpdateDTO jobOfferUpdateDTO, Long userId) {
+        JobOffer jobOffer;
 
+        if (userId == null) {
+            // ADMIN mode - no ownership check
+            jobOffer = jobOfferRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found"));
+        } else {
+            // RECRUITER mode - ownership check
+            jobOffer = jobOfferRepository.findByIdAndUserId(id, userId)
+                    .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found or not owned by use"));
+        }
+
+//        jobOffer = jobOfferRepository.findByIdAndUserId(id, userId)
+//                .orElseThrow(() -> new RuntimeException("Job offer with ID " + id + " not found"));
+
+        // Update fields
         jobOffer.setTitle(jobOfferUpdateDTO.title());
         jobOffer.setDescription(jobOfferUpdateDTO.description());
         jobOffer.setLocation(jobOfferUpdateDTO.location());
