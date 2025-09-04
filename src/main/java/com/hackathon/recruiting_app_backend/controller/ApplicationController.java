@@ -1,6 +1,7 @@
 package com.hackathon.recruiting_app_backend.controller;
 
 import com.hackathon.recruiting_app_backend.dto.ApplicationRequestDTO;
+import com.hackathon.recruiting_app_backend.dto.ApplicationResponseDTO;
 import com.hackathon.recruiting_app_backend.model.Application;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
@@ -52,7 +53,9 @@ public class ApplicationController {
                     candidate, jobOffer, requestDTO.coverLetter());
 
             // 4. Return the application
-            return ResponseEntity.status(HttpStatus.CREATED).body(application);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(application);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApplicationResponseDTO.fromEntity(application));
+
 
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

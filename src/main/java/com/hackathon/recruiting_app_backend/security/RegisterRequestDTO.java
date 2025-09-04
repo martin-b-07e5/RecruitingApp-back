@@ -1,20 +1,20 @@
 package com.hackathon.recruiting_app_backend.security;
 
-import lombok.Data;
+import java.util.List;
 
-@Data
-public class RegisterRequestDTO {
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String role;
-    //
-    // Specific fields for each type of user
-    private String resumeFile;
-    private String skills;
-    private String experience;
-    // so that it adds comapany_id when creating a recruiter
-    private Long companyId;
+public record RegisterRequestDTO(
+        String email,
+        String password,
+        String firstName,
+        String lastName,
+        String phone,
+        String role,
+        // Specific fields for each type of user
+        String resumeFile,
+        List<String> skills,
+        String experience,
+        // so that it adds comapany_id when creating a recruiter
+        Long companyId
+) {
 }
+

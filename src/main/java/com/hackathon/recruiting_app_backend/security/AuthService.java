@@ -1,5 +1,6 @@
 package com.hackathon.recruiting_app_backend.security;
 
+import com.hackathon.recruiting_app_backend.model.Skill;
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
@@ -8,6 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -42,19 +46,31 @@ public class AuthService {
     }
 
     public AuthResponseDTO register(RegisterRequestDTO request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new RuntimeException("Email already exists");
         }
 
         User user = User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .phone(request.getPhone())
-                .role(User.Role.valueOf(request.getRole()))
-                .experience(request.getExperience())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .phone(request.phone())
+                .role(User.Role.valueOf(request.role()))
+                .resumeFile(request.resumeFile())
+                .experience(request.experience())
                 .build();
+
+        // Convert List<String> to List<Skill>
+        if (request.skills() != null) {
+            List<Skill> skills = request.skills().stream()
+                    .map(skillName -> Skill.builder()
+                            .name(skillName)
+                            .user(user) // ← Establish a bidirectional relationship
+                            .build())
+                    .collect(Collectors.toList());
+            user.setSkills(skills);
+        }
 
         User savedUser = userRepository.save(user);
 

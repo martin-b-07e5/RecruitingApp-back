@@ -1,5 +1,6 @@
 package com.hackathon.recruiting_app_backend.config;
 
+import com.hackathon.recruiting_app_backend.model.Skill;
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class AdminDataLoader implements CommandLineRunner {
                     .role(User.Role.RECRUITER)
                     .build();
 
-            // Candidate de prueba
+            // Test Candidate
             User candidate = User.builder()
                     .email("candidate@example.com")
                     .password(passwordEncoder.encode("password123"))
@@ -48,10 +49,17 @@ public class AdminDataLoader implements CommandLineRunner {
                     .lastName("Developer")
                     .phone("+1234567892")
                     .role(User.Role.CANDIDATE)
-                    .skills(List.of("Java", "Spring", "React"))
+//                    .skills(List.of("Java", "Spring", "React"))
                     .experience("3 years full-stack development")
                     .resumeFile("maria_cv.pdf")
                     .build();
+
+            // Create skills
+            Skill skill1 = Skill.builder().name("Java").user(candidate).build();
+            Skill skill2 = Skill.builder().name("Spring").user(candidate).build();
+            Skill skill3 = Skill.builder().name("React").user(candidate).build();
+            // Add skills to the user
+            candidate.setSkills(List.of(skill1, skill2, skill3));
 
             userRepository.save(admin);
             userRepository.save(recruiter);

@@ -74,9 +74,6 @@ public class User {
     @Column
     private String resumeFile;
 
-    @ElementCollection
-    private List<String> skills;
-
     @Column
     private String experience;
 
@@ -91,5 +88,10 @@ public class User {
     // Relationship for recruiters with job offers
     @OneToMany(mappedBy = "user")
     private List<JobOffer> jobOffers;  // A recruiter can create many job offers
+
+    // Relationship for users with their skills (both candidates and recruiters can have skills)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Skill> skills;
+
 
 }
