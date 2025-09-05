@@ -5,22 +5,24 @@ import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
+@Order(1) // Run first
 public class AdminDataLoader implements CommandLineRunner {
 
-    private final UserRepository userRepository; // ✅ Cambiar por UserRepository
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
-
             // Admin.
             User admin = User.builder()
                     .email("admin@recruitingapp.com")
@@ -54,17 +56,18 @@ public class AdminDataLoader implements CommandLineRunner {
                     .resumeFile("maria_cv.pdf")
                     .build();
 
-            // Create skills
-            Skill skill1 = Skill.builder().name("Java").user(candidate).build();
-            Skill skill2 = Skill.builder().name("Spring").user(candidate).build();
-            Skill skill3 = Skill.builder().name("React").user(candidate).build();
-            // Add skills to the user
-            candidate.setSkills(List.of(skill1, skill2, skill3));
+            // Skills of the candidate@example.com
+            candidate.setSkills(Stream.of("Java", "Spring", "React")
+                    .map(name -> Skill.builder()
+                            .name(name)
+                            .user(candidate)
+                            .build())
+                    .collect(Collectors.toList()));
 
             userRepository.save(admin);
             userRepository.save(recruiter);
             userRepository.save(candidate);
         }
-
     }
+
 }

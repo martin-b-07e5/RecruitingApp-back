@@ -14,13 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-//@Inheritance(strategy = InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@SuperBuilder
 @Builder
 public class User {
 
@@ -77,21 +74,24 @@ public class User {
     @Column
     private String experience;
 
-    // Relationship for both: recruiters and candidates with companies
+    // Relationship for both: recruiters and candidates with companies.
+    // Represents a user’s association with companies (e.g., recruiters employed by a company or candidates’ work history).
     @OneToMany(mappedBy = "user")
     private List<UserCompany> companies;
 
-    // Relationship for candidates with applications
+    // Relationship for candidates with applications.
+    // Links candidates to their job applications, supporting the application system.
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications;
 
     // Relationship for recruiters with job offers
+    // Links recruiters to the job offers they create, supporting job management.
     @OneToMany(mappedBy = "user")
     private List<JobOffer> jobOffers;  // A recruiter can create many job offers
 
-    // Relationship for users with their skills (both candidates and recruiters can have skills)
+    // Relationship for users with their skills.
+    // Allows candidates to have multiple skills.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Skill> skills;
-
 
 }

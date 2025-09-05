@@ -1,6 +1,5 @@
 package com.hackathon.recruiting_app_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,19 +27,14 @@ public class JobOffer {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "location", nullable = false)
-    private String location;
-
     @Column(name = "salary", nullable = false)
     private String salary;
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "location", nullable = false)
+    private String location;
+//    REMOTE,         // Remote (if specific)
+//    HYBRID;         // Hybrid
+//    Mountain View, CA
 
     @Column(name = "employment_type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -50,12 +44,16 @@ public class JobOffer {
         FULL_TIME,
         PART_TIME,
         FREELANCE,
-        INTERNSHIP,
-        CONTRACTOR,     // For fixed-term contracts
-        TEMPORARY,      // Temporary
-        REMOTE,         // Remote (if specific)
-        HYBRID;         // Hybrid
     }
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
 
     // Inverse relationship in JobOffer with Company
     @ManyToOne

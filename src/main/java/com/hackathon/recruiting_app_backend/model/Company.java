@@ -2,7 +2,10 @@ package com.hackathon.recruiting_app_backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +28,7 @@ public class Company {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "website")
@@ -33,6 +36,14 @@ public class Company {
 
     @Column(name = "phone", length = 20)
     private String phone;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     // one company has 0 or many job offers (inverse relationship in JobOffer must exist)
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
