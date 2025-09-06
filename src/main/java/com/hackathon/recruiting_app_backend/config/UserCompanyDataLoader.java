@@ -24,12 +24,18 @@ public class UserCompanyDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (userCompanyRepository.count() == 0) {
-            // Find recruiter and companies
+            // Find recruiters
             User recruiter = userRepository.findByEmail("recruiter@google.com").orElseThrow(() -> new RuntimeException("Recruiter not found"));
+            User recruiter1 = userRepository.findByEmail("recruiter1@example.com").orElseThrow(() -> new RuntimeException("Recruiter not found"));
+
+            // Find companies
             Company google = companyRepository.findByEmail("contact@google.com").orElseThrow(() -> new RuntimeException("Company not found"));
             Company microsoft = companyRepository.findByEmail("support@microsoft.com").orElseThrow(() -> new RuntimeException("Company not found"));
+            Company apple = companyRepository.findByEmail("info@apple.com").orElseThrow(() -> new RuntimeException("Company not found"));
+            Company amazon = companyRepository.findByEmail("contact@amazon.com").orElseThrow(() -> new RuntimeException("Company not found"));
+            Company meta = companyRepository.findByEmail("info@meta.com").orElseThrow(() -> new RuntimeException("Company not found"));
 
-            // Link recruiter to Google
+            // Link recruiter (recruiter@google.com) to Google and Microsoft
             userCompanyRepository.save(UserCompany.builder()
                     .user(recruiter)
                     .company(google)
@@ -39,11 +45,38 @@ public class UserCompanyDataLoader implements CommandLineRunner {
                     .relationshipType(UserCompany.EmploymentRelationshipType.RECRUITER)
                     .build());
 
-            // Link recruiter to Microsoft
             userCompanyRepository.save(UserCompany.builder()
                     .user(recruiter)
                     .company(microsoft)
                     .position("Recruitment Manager")
+                    .startDate(LocalDate.now().minusYears(1))
+                    .isCurrentlyEmployed(true)
+                    .relationshipType(UserCompany.EmploymentRelationshipType.RECRUITER)
+                    .build());
+
+            // Link recruiter1 (recruiter1@google.com) to apple, amazon and meta
+            userCompanyRepository.save(UserCompany.builder()
+                    .user(recruiter1)
+                    .company(apple)
+                    .position("Recruiter")
+                    .startDate(LocalDate.now().minusYears(1))
+                    .isCurrentlyEmployed(true)
+                    .relationshipType(UserCompany.EmploymentRelationshipType.RECRUITER)
+                    .build());
+
+            userCompanyRepository.save(UserCompany.builder()
+                    .user(recruiter1)
+                    .company(amazon)
+                    .position("Recruiter")
+                    .startDate(LocalDate.now().minusYears(1))
+                    .isCurrentlyEmployed(true)
+                    .relationshipType(UserCompany.EmploymentRelationshipType.RECRUITER)
+                    .build());
+
+            userCompanyRepository.save(UserCompany.builder()
+                    .user(recruiter1)
+                    .company(meta)
+                    .position("Recruiter")
                     .startDate(LocalDate.now().minusYears(1))
                     .isCurrentlyEmployed(true)
                     .relationshipType(UserCompany.EmploymentRelationshipType.RECRUITER)

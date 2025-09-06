@@ -13,7 +13,11 @@ public record JobOfferResponseDTO(
         JobOffer.EmploymentType employmentType,
         LocalDateTime createdAt,
         String companyName, // Only company name, not the entire Company object
-        Long companyId) {
+        Long companyId,
+        Long recruiterId,
+        String recruiterFirstName,
+        String recruiterLastName,
+        String recruiterEmail) {
     /**
      * Factory method to convert JobOffer entity to Response DTO
      * Avoids circular references and exposes only necessary data
@@ -28,7 +32,11 @@ public record JobOfferResponseDTO(
                 jobOffer.getEmploymentType(),
                 jobOffer.getCreatedAt(),
                 jobOffer.getCompany().getName(),
-                jobOffer.getCompany().getId()
+                jobOffer.getCompany().getId(),
+                jobOffer.getUser().getId(),
+                jobOffer.getUser().getFirstName(),
+                jobOffer.getUser().getLastName(),
+                jobOffer.getUser().getEmail()
         );
     }
 }
