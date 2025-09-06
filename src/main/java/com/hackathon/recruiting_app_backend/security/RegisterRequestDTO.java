@@ -14,7 +14,7 @@ public record RegisterRequestDTO(
         List<String> skills,
         String experience,
         // so that it adds comapany_id when creating a recruiter
-        Long companyId
+        List<Long> companyIds // Changed from companyId to companyIds
 ) {
 }
 
