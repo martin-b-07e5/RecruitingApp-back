@@ -47,22 +47,27 @@ public class JobOfferController {
         // Change JobOffer to <?> to handle errors
 
         try {
-            // 1. Get the authenticated user (recruiter)
+            // 1. Validate that the company exists
+            if (jobOfferRequestDTO.companyId() == null) {
+                throw new RuntimeException("Company ID is required");
+            }
+
+            // 2. Get the authenticated user (recruiter)
             String email = authentication.getName();
             User recruiter = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Recruiter not found"));
 
-            // 2. Validate that the recruiter has permission for this company
+            // 3. Validate that the recruiter has permission for this company
             Company company = companyRepository.findById(jobOfferRequestDTO.companyId())
                     .orElseThrow(() -> new RuntimeException("Company not found"));
 
-            // 3. Verify that the recruiter belongs to the company
+            // 4. Verify that the recruiter belongs to the company
             if (!userCompanyRepository.existsByUserIdAndCompanyIdAndRelationshipType(
                     recruiter.getId(), company.getId(), UserCompany.EmploymentRelationshipType.RECRUITER)) {
                 throw new RuntimeException("Recruiter not authorized for this company");
             }
 
-            // 4. Create JobOffer from DTO
+            // 5. Create JobOffer from DTO
             JobOffer jobOffer = JobOffer.builder()
                     .title(jobOfferRequestDTO.title())
                     .description(jobOfferRequestDTO.description())
@@ -71,7 +76,7 @@ public class JobOfferController {
                     .employmentType(jobOfferRequestDTO.employmentType())
                     .build();
 
-            // 5. Save
+            // 6. Save
             JobOffer savedOffer = jobOfferService.createJobOffer(jobOffer, recruiter, company);
 //            return ResponseEntity.ok(savedOffer.getId());
             return ResponseEntity.ok(JobOfferResponseDTO.fromEntity(savedOffer));
