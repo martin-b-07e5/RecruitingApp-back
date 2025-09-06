@@ -6,8 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "companies")
@@ -47,6 +46,7 @@ public class Company {
 
     // one company has 0 or many job offers (inverse relationship in JobOffer must exist)
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    private Set<JobOffer> jobOffers = new HashSet<>();
+    @OrderBy("createdAt DESC")
+    private List<JobOffer> jobOffers;
 
 }

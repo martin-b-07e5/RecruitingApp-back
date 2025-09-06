@@ -31,10 +31,12 @@ public class UserCompany {
     private String position;  // Recruiter Manage | Software Developer | Full Stack Developer | etc.
 
     // startDate and endDate: Track employment duration.
+    @NotNull
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean isCurrentlyEmployed;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private EmploymentRelationshipType relationshipType; // RECRUITER, EMPLOYEE, FORMER_EMPLOYEE
 

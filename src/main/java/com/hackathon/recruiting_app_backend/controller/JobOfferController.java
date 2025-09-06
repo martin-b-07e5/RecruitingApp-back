@@ -6,6 +6,8 @@ import com.hackathon.recruiting_app_backend.dto.JobOfferUpdateDTO;
 import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
+import com.hackathon.recruiting_app_backend.model.UserCompany;
+import com.hackathon.recruiting_app_backend.repository.UserCompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
 import com.hackathon.recruiting_app_backend.service.JobOfferService;
@@ -27,12 +29,14 @@ public class JobOfferController {
     private final JobOfferService jobOfferService;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final UserCompanyRepository userCompanyRepository;
 
     // constructor
-    public JobOfferController(JobOfferService jobOfferService, UserRepository userRepository, CompanyRepository companyRepository) {
+    public JobOfferController(JobOfferService jobOfferService, UserRepository userRepository, CompanyRepository companyRepository, UserCompanyRepository userCompanyRepository) {
         this.jobOfferService = jobOfferService;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
+        this.userCompanyRepository = userCompanyRepository;
     }
 
     // createJobOffer (Recruiters can post new job opportunities)
@@ -53,10 +57,10 @@ public class JobOfferController {
                     .orElseThrow(() -> new RuntimeException("Company not found"));
 
             // 3. Verify that the recruiter belongs to the company
-            // 3. ⚠️ TEMPORARY: Skip verification until UserCompany is implemented
-//        if (!recruiterService.isRecruiterInCompany(recruiter.getId(), company.getId())) {
-//            throw new RuntimeException("Recruiter not authorized for this company");
-//        }
+            if (!userCompanyRepository.existsByUserIdAndCompanyIdAndRelationshipType(
+                    recruiter.getId(), company.getId(), UserCompany.EmploymentRelationshipType.RECRUITER)) {
+                throw new RuntimeException("Recruiter not authorized for this company");
+            }
 
             // 4. Create JobOffer from DTO
             JobOffer jobOffer = JobOffer.builder()
@@ -83,10 +87,6 @@ public class JobOfferController {
     // GET http://localhost:8080/api/job-offers/getAllJobOffers
     public ResponseEntity<?> getAllJobOffers() {
         try {
-
-//            ⚠️ FORCE ERROR - Add this line and comment out until the beginning of the catch:
-//            throw new RuntimeException("🔥 Error de prueba en getAllJobOffers");
-
             List<JobOffer> jobOffers = jobOfferService.getAllJobOffers();
 
             // convert each JobOffer to JobOfferResponseDTO
@@ -186,7 +186,10 @@ public class JobOfferController {
             return ResponseEntity.ok(JobOfferResponseDTO.fromEntity(updatedJobOffer));
 
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage()); // Message from the service.
+            if (e.getMessage().contains("not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 
