@@ -11,11 +11,12 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     boolean existsByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId); // To check if an application already exists
 
-    List<JobApplication> findByCandidateId(Long candidateId); // To get applications from a candidate
-
     List<JobApplication> findByJobOfferId(Long jobOfferId); // To get applications from a job offer
 
-//    List<JobApplication> findByJobOfferIdAndCandidateId(
-//            Long jobOfferId, Long candidateId); // To get applications from a job offer and a candidate
+    List<JobApplication> findByCandidateId(Long candidateId); // To get applications from a candidate
+
+    List<JobApplication> findByJobOfferUserId(Long userId); // To get applications from a recruiter
+
+    List<JobApplication> findByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId); // To get applications from a job offer and a candidate
 
 }

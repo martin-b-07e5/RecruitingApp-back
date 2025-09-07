@@ -4,6 +4,7 @@ import com.hackathon.recruiting_app_backend.dto.JobApplicationRequestDTO;
 import com.hackathon.recruiting_app_backend.dto.JobApplicationResponseDTO;
 import com.hackathon.recruiting_app_backend.model.JobApplication;
 import com.hackathon.recruiting_app_backend.model.User;
+import com.hackathon.recruiting_app_backend.repository.JobOfferRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import com.hackathon.recruiting_app_backend.service.JobApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/job-applications")
@@ -24,12 +24,13 @@ public class JobApplicationController {
     // inject dependencies
     private final JobApplicationService jobApplicationService;
     private final UserRepository userRepository;
+    private final JobOfferRepository jobOfferRepository;
 
-    // create application (Candidates can apply to job offers)
+    // Create jobApplication (Candidates can apply to job offers)
     @PostMapping("/apply")
     @PreAuthorize("hasRole('CANDIDATE')")
     // POST http://localhost:8080/api/job-applications/apply
-    public ResponseEntity<?> createApplication(@RequestBody JobApplicationRequestDTO requestDTO, Authentication authentication) {
+    public ResponseEntity<?> applyToJob(@RequestBody JobApplicationRequestDTO requestDTO, Authentication authentication) {
         try {
             // 1. Get the authenticated user
             String email = authentication.getName();
@@ -47,6 +48,84 @@ public class JobApplicationController {
 //            return ResponseEntity.status(HttpStatus.CREATED).body(jobApplication);
             return ResponseEntity.status(HttpStatus.CREATED).body(JobApplicationResponseDTO.fromEntity(jobApplication));
 
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
+
+    // getAllJobApplications (Admin|Recruiter)
+    @GetMapping("getAllJobApplications")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER')")
+    // GET http://localhost:8080/api/job-applications/getAllJobApplications
+    public ResponseEntity<?> getAllJobApplications() {
+        try {
+            List<JobApplicationResponseDTO> applications = jobApplicationService.getAllJobApplications();
+            return ResponseEntity.ok(applications);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
+    // getJobApplicationById (Admin/Recruiter)
+    @GetMapping("/getJobApplicationById/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER', 'CANDIDATE')")
+    // GET http://localhost:8080/api/job-applications/getJobApplicationById/3
+    public ResponseEntity<?> getJobApplicationById(@PathVariable Long id, Authentication authentication) {
+        try {
+            JobApplicationResponseDTO application = jobApplicationService.getJobApplicationById(id);
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (user.getRole() == User.Role.RECRUITER) {
+                Long jobOfferRecruiterId = jobOfferRepository.findById(application.jobOfferId())
+                        .orElseThrow(() -> new RuntimeException("Job offer not found"))
+                        .getUser().getId();
+                if (!jobOfferRecruiterId.equals(user.getId())) {
+                    throw new RuntimeException("Recruiter Not authorized to view this application");
+                }
+            }
+
+            if (user.getRole() == User.Role.CANDIDATE) {
+                if (!application.candidateId().equals(user.getId())) {
+                    throw new RuntimeException("Candidate Not authorized to view this application");
+                }
+            }
+
+            return ResponseEntity.ok(application);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
+    // Get candidate's job applications
+    @GetMapping("/geCandidateJobApplications")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<?> geCandidateJobApplications(Authentication authentication) {
+        try {
+            User candidate = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("Candidate not found"));
+            List<JobApplicationResponseDTO> applications = jobApplicationService.geCandidateJobApplications(candidate.getId());
+            return ResponseEntity.ok(applications);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
+    // Get applications for recruiter's jobs
+    @GetMapping("/getJobsApplicationsForRecruiters")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<?> getJobsApplicationsForRecruiters(Authentication authentication) {
+        try {
+            User recruiter = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("Recruiter not found"));
+            List<JobApplicationResponseDTO> applications = jobApplicationService.getJobsApplicationsForRecruiters(recruiter.getId());
+            return ResponseEntity.ok(applications);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("❌ " + e.getMessage());

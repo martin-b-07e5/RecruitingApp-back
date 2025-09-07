@@ -1,5 +1,6 @@
 package com.hackathon.recruiting_app_backend.service;
 
+import com.hackathon.recruiting_app_backend.dto.JobApplicationResponseDTO;
 import com.hackathon.recruiting_app_backend.model.JobApplication;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class JobApplicationService {
     private final JobOfferRepository jobOfferRepository;
     private final UserRepository userRepository;
 
-    // candidate applyToJob
+    // applyToJob
     public JobApplication applyToJob(Long candidateId, Long jobOfferId, String coverLetter) {
 
         User candidate = userRepository.findById(candidateId).orElseThrow(() -> new RuntimeException("Candidate not found"));
@@ -42,6 +45,34 @@ public class JobApplicationService {
                 .build();
 
         return jobApplicationRepository.save(application);
+    }
+
+    // Get all job applications (Admin|Recruiter)
+    public List<JobApplicationResponseDTO> getAllJobApplications() {
+        return jobApplicationRepository.findAll().stream()
+                .map(JobApplicationResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // getJobApplicationById (Admin|Recruiter)
+    public JobApplicationResponseDTO getJobApplicationById(Long id) {
+        JobApplication application = jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+        return JobApplicationResponseDTO.fromEntity(application);
+    }
+
+    // Get candidate's job applications
+    public List<JobApplicationResponseDTO> geCandidateJobApplications(Long candidateId) {
+        return jobApplicationRepository.findByCandidateId(candidateId).stream()
+                .map(JobApplicationResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // Get applications for recruiter's jobs
+    public List<JobApplicationResponseDTO> getJobsApplicationsForRecruiters(Long recruiterId) {
+        return jobApplicationRepository.findByJobOfferUserId(recruiterId).stream()
+                .map(JobApplicationResponseDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
 }
