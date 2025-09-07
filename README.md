@@ -21,7 +21,7 @@ backend and React frontend.
 ## 👥 User Stories Implemented
 
 - **As a 🎯recruiter**: I can post jobs and manage hiring processes.
-- **As a 👤candidate**: I can apply for jobs and follow my application status.
+- **As a 👤candidate**: I can apply for jobs and follow my jobApplication status.
 - **As an 🔧administrator**: I can manage users and platform content.
 
 ## ✨ Essential Features
@@ -180,7 +180,7 @@ See the [LICENSE](LICENSE) file for details.
 
 ```http
 POST /api/auth/login
-Content-Type: application/json
+Content-Type: jobApplication/json
 
 {
   "email": "recruiter@google.com",

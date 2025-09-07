@@ -10,11 +10,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "companies")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Company {
 
     @Id

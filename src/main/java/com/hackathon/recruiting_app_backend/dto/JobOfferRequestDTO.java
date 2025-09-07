@@ -2,7 +2,7 @@ package com.hackathon.recruiting_app_backend.dto;
 
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 
-// POST http://localhost:8080/api/job-offers/create
+// used in POST http://localhost:8080/api/job-offers/create
 public record JobOfferRequestDTO(
         String title,
         String description,

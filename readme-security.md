@@ -1,4 +1,4 @@
-### application.properties
+### jobApplication.properties
 
     jwt.secret=yourSuperSecretKeyWithAtLeast256BitsLongForHS256
     # 24 hours
@@ -555,7 +555,7 @@ public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request
 
 # 🧪 **Testing the JWT Authentication**
 
-## **1. First, add the missing properties to application.properties:**
+## **1. First, add the missing properties to jobApplication.properties:**
 
 ```properties
 jwt.secret=yourSuperSecretKeyWithAtLeast256BitsLongForHS256
@@ -568,7 +568,7 @@ jwt.expiration=86400000
 
 ```bash
 curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
+  -H "Content-Type: jobApplication/json" \
   -d '{
     "email": "test@example.com",
     "password": "password123",
@@ -582,7 +582,7 @@ curl -X POST http://localhost:8080/api/auth/register \
 
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
+  -H "Content-Type: jobApplication/json" \
   -d '{
     "email": "test@example.com",
     "password": "password123"

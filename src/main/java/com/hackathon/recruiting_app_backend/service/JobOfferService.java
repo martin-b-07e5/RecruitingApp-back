@@ -5,20 +5,18 @@ import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.JobOfferRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class JobOfferService {
     // dependency injection
     private final JobOfferRepository jobOfferRepository;
 
-    // constructor
-    public JobOfferService(JobOfferRepository jobOfferRepository) {
-        this.jobOfferRepository = jobOfferRepository;
-    }
 
     // create job offer
     public JobOffer createJobOffer(JobOffer jobOffer, User recruiter, Company company) {

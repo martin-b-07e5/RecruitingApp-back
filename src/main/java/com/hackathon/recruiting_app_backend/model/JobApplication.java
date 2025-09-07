@@ -8,17 +8,25 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "applications")
-@Getter
-@Setter
+@Table(name = "job_applications")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Application {
+public class JobApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // Inverse relationship in Application with JobOffer
+    @ManyToOne
+    @JoinColumn(name = "job_offer_id")
+    private JobOffer jobOffer; // Each application is for one job offer (🎯 For which job)
+
+    @ManyToOne
+    @JoinColumn(name = "candidate_id")
+    private User candidate;  // Each application belongs to one candidate (👤 Who applies)
 
     @Column(name = "cover_letter", columnDefinition = "TEXT")
     private String coverLetter;
@@ -45,13 +53,5 @@ public class Application {
         WITHDRAWN       // Candidate withdrew application
     }
 
-    // Inverse relationship in Application with JobOffer
-    @ManyToOne
-    @JoinColumn(name = "job_offer_id")
-    private JobOffer jobOffer; // Each application is for one job offer (🎯 For which job)
-
-    @ManyToOne
-    @JoinColumn(name = "candidate_id")
-    private User candidate;  // Each application belongs to one candidate (👤 Who applies)
-
 }
+

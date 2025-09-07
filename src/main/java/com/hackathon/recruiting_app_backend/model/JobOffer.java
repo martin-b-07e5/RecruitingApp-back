@@ -10,11 +10,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "job_offers")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class JobOffer {
 
     @Id
@@ -62,7 +61,7 @@ public class JobOffer {
 
     // one jobOffer has N applications
     @OneToMany(mappedBy = "jobOffer")
-    private Set<Application> applications;
+    private Set<JobApplication> jobApplications;
 
     // Inverse relationship in JobOffer with User
     @ManyToOne

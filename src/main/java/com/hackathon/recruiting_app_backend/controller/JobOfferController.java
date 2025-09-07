@@ -11,6 +11,7 @@ import com.hackathon.recruiting_app_backend.repository.UserCompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
 import com.hackathon.recruiting_app_backend.service.JobOfferService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/job-offers")
+@RequiredArgsConstructor
 public class JobOfferController {
 
     // inject dependencies
@@ -30,14 +32,6 @@ public class JobOfferController {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final UserCompanyRepository userCompanyRepository;
-
-    // constructor
-    public JobOfferController(JobOfferService jobOfferService, UserRepository userRepository, CompanyRepository companyRepository, UserCompanyRepository userCompanyRepository) {
-        this.jobOfferService = jobOfferService;
-        this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
-        this.userCompanyRepository = userCompanyRepository;
-    }
 
     // createJobOffer (Recruiters can post new job opportunities)
     @PostMapping("/create")

@@ -8,11 +8,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "user_company")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserCompany {
 
     @Id

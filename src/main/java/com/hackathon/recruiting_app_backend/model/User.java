@@ -14,11 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User {
 
     @Id
@@ -82,7 +81,7 @@ public class User {
     // Relationship for candidates with applications.
     // Links candidates to their job applications, supporting the application system.
     @OneToMany(mappedBy = "candidate")
-    private List<Application> applications;
+    private List<JobApplication> jobApplications;
 
     // Relationship for recruiters with job offers
     // Links recruiters to the job offers they create, supporting job management.
