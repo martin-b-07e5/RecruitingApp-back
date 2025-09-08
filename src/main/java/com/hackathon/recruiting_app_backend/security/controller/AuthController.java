@@ -1,5 +1,9 @@
-package com.hackathon.recruiting_app_backend.security;
+package com.hackathon.recruiting_app_backend.security.controller;
 
+import com.hackathon.recruiting_app_backend.security.dto.AuthRequestDTO;
+import com.hackathon.recruiting_app_backend.security.dto.AuthResponseDTO;
+import com.hackathon.recruiting_app_backend.security.service.AuthService;
+import com.hackathon.recruiting_app_backend.security.dto.RegisterRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

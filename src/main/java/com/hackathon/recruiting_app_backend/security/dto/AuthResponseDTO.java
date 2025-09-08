@@ -1,4 +1,4 @@
-package com.hackathon.recruiting_app_backend.security;
+package com.hackathon.recruiting_app_backend.security.dto;
 
 import lombok.Data;
 

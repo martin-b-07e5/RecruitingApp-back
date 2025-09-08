@@ -1,4 +1,4 @@
-package com.hackathon.recruiting_app_backend.security;
+package com.hackathon.recruiting_app_backend.security.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

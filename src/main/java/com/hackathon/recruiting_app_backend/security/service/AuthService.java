@@ -1,4 +1,4 @@
-package com.hackathon.recruiting_app_backend.security;
+package com.hackathon.recruiting_app_backend.security.service;
 
 import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.Skill;
@@ -7,6 +7,9 @@ import com.hackathon.recruiting_app_backend.model.UserCompany;
 import com.hackathon.recruiting_app_backend.repository.CompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.UserCompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
+import com.hackathon.recruiting_app_backend.security.util.JwtUtil;
+import com.hackathon.recruiting_app_backend.security.dto.RegisterRequestDTO;
+import com.hackathon.recruiting_app_backend.security.dto.AuthResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

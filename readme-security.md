@@ -26,6 +26,7 @@ Next `SecurityConfig.java` with auth0?
 ```java
 package com.hackathon.recruiting_app_backend.security;
 
+import com.hackathon.recruiting_app_backend.security.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -92,7 +93,7 @@ public class SecurityConfig {
 
 'addFilterBefore(jakarta.servlet.Filter, java.lang.Class<? extends jakarta.servlet.Filter>)' in '
 org.springframework.security.config.annotation.web.builders.HttpSecurity' cannot be applied to '(
-com.hackathon.recruiting_app_backend.security.JwtAuthenticationFilter, java.lang.Class<
+com.hackathon.recruiting_app_backend.security.filter.JwtAuthenticationFilter, java.lang.Class<
 org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter>)'
 
 ### solution:
@@ -286,6 +287,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 ```java
 package com.hackathon.recruiting_app_backend.security;
 
+import com.hackathon.recruiting_app_backend.security.service.CustomUserDetailsService;
+import com.hackathon.recruiting_app_backend.security.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -357,6 +360,7 @@ package com.hackathon.recruiting_app_backend.security;
 
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
+import com.hackathon.recruiting_app_backend.security.util.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -466,6 +470,9 @@ public class AuthResponseDTO {
 package com.hackathon.recruiting_app_backend.security;
 
 import com.hackathon.recruiting_app_backend.model.User;
+import com.hackathon.recruiting_app_backend.security.dto.AuthRequestDTO;
+import com.hackathon.recruiting_app_backend.security.dto.AuthResponseDTO;
+import com.hackathon.recruiting_app_backend.security.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
