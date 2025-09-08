@@ -119,4 +119,20 @@ public class JobApplicationService {
         return JobApplicationResponseDTO.fromEntity(jobApplicationRepository.save(application));
     }
 
+    // deleteJobApplication ('ADMIN', 'RECRUITER')
+    public void deleteJobApplication(Long id, Long userId, User.Role role) {
+        JobApplication application = jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+
+        if (role == User.Role.CANDIDATE) {
+            throw new RuntimeException("Candidates cannot delete job applications");
+        }
+
+        if (role == User.Role.RECRUITER && !application.getJobOffer().getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not the recruiter of this job application");
+        }
+        
+        jobApplicationRepository.delete(application);
+    }
+
 }

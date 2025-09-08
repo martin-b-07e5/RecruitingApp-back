@@ -180,4 +180,28 @@ public class JobApplicationController {
         }
     }
 
+    // deleteJobApplication ('ADMIN')
+    @DeleteMapping("/deleteJobApplication/{id}")
+    @PreAuthorize("hasRole('ADMIN', 'RECRUITER')")
+    public ResponseEntity<?> deleteJobApplication(@PathVariable Long id, Authentication authentication) {
+        try {
+            // 1. Get the authenticated user
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // 2. Delete the application
+            jobApplicationService.deleteJobApplication(
+                    id,
+                    user.getId(),
+                    user.getRole()
+            );
+
+            return ResponseEntity.ok("✅ Job application (ID: " + id + ") deleted successfully");
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
 }

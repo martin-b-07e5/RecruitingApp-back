@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Auth
                         .requestMatchers("/api/auth/**").permitAll()
                         // Job Offers
                         .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
@@ -49,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/job-applications/geCandidateJobApplications").hasRole("CANDIDATE")
                         .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobsApplicationsForRecruiters").hasRole("RECRUITER")
                         .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/job-applications/deleteJobApplication/*").hasAnyRole("ADMIN", "RECRUITER")
                         .requestMatchers(HttpMethod.PUT, "/api/job-applications/updateApplicationStatus/*").hasAnyRole("RECRUITER", "ADMIN")
 
                         // All
