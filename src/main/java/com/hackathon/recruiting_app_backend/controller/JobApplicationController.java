@@ -26,7 +26,7 @@ public class JobApplicationController {
     private final UserRepository userRepository;
     private final JobOfferRepository jobOfferRepository;
 
-    // Create jobApplication (Candidates can apply to job offers)
+    // applyToJob ('CANDIDATE') (Candidates can apply to job offers)
     @PostMapping("/apply")
     @PreAuthorize("hasRole('CANDIDATE')")
     // POST http://localhost:8080/api/job-applications/apply
@@ -54,8 +54,7 @@ public class JobApplicationController {
         }
     }
 
-
-    // getAllJobApplications (Admin|Recruiter)
+    // getAllJobApplications ('ADMIN', 'RECRUITER')
     @GetMapping("getAllJobApplications")
     @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER')")
     // GET http://localhost:8080/api/job-applications/getAllJobApplications
@@ -69,7 +68,7 @@ public class JobApplicationController {
         }
     }
 
-    // getJobApplicationById (Admin/Recruiter)
+    // getJobApplicationById ('ADMIN', 'RECRUITER', 'CANDIDATE')
     @GetMapping("/getJobApplicationById/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER', 'CANDIDATE')")
     // GET http://localhost:8080/api/job-applications/getJobApplicationById/3
@@ -102,7 +101,7 @@ public class JobApplicationController {
         }
     }
 
-    // Get candidate's job applications
+    // geCandidateJobApplications ('CANDIDATE')
     @GetMapping("/geCandidateJobApplications")
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<?> geCandidateJobApplications(Authentication authentication) {
@@ -117,7 +116,7 @@ public class JobApplicationController {
         }
     }
 
-    // Get applications for recruiter's jobs
+    // getJobsApplicationsForRecruiters ('RECRUITER')
     @GetMapping("/getJobsApplicationsForRecruiters")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<?> getJobsApplicationsForRecruiters(Authentication authentication) {
@@ -126,6 +125,31 @@ public class JobApplicationController {
                     .orElseThrow(() -> new RuntimeException("Recruiter not found"));
             List<JobApplicationResponseDTO> applications = jobApplicationService.getJobsApplicationsForRecruiters(recruiter.getId());
             return ResponseEntity.ok(applications);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
+    // withdrawApplication ('CANDIDATE', 'RECRUITER', 'ADMIN')
+    @DeleteMapping("/withdrawApplication/{id}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMIN')")
+    public ResponseEntity<?> withdrawApplication(@PathVariable Long id, Authentication authentication) {
+        try {
+            // 1. Get the authenticated user
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // 2. Withdraw the application
+            JobApplicationResponseDTO application = jobApplicationService.withdrawApplication(
+                    id,
+                    user.getId(),
+                    user.getRole()
+            );
+
+            // 3. Return the application
+            return ResponseEntity.ok(application);
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("❌ " + e.getMessage());

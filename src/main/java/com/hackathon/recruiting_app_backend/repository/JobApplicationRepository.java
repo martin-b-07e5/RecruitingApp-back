@@ -9,14 +9,19 @@ import java.util.List;
 @Repository
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
 
-    boolean existsByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId); // To check if an application already exists
+    // applyToJob (msg: You have already applied to this job)
+    boolean existsByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId);
 
-    List<JobApplication> findByJobOfferId(Long jobOfferId); // To get applications from a job offer
+    // geCandidateJobApplications
+    List<JobApplication> findByCandidateId(Long candidateId);
 
-    List<JobApplication> findByCandidateId(Long candidateId); // To get applications from a candidate
+    // getJobsApplicationsForRecruiters
+    List<JobApplication> findByJobOfferUserId(Long userId);
 
-    List<JobApplication> findByJobOfferUserId(Long userId); // To get applications from a recruiter
+    // To get applications from a job offer
+    List<JobApplication> findByJobOfferId(Long jobOfferId);
 
-    List<JobApplication> findByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId); // To get applications from a job offer and a candidate
+    // To get applications from a job offer and a candidate
+    List<JobApplication> findByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId);
 
 }

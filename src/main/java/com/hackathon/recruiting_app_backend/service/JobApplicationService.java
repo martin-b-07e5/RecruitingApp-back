@@ -22,7 +22,7 @@ public class JobApplicationService {
     private final JobOfferRepository jobOfferRepository;
     private final UserRepository userRepository;
 
-    // applyToJob
+    // applyToJob (CANDIDATE)
     public JobApplication applyToJob(Long candidateId, Long jobOfferId, String coverLetter) {
 
         User candidate = userRepository.findById(candidateId).orElseThrow(() -> new RuntimeException("Candidate not found"));
@@ -31,6 +31,7 @@ public class JobApplicationService {
         if (!candidate.getRole().equals(User.Role.CANDIDATE)) {
             throw new RuntimeException("Only candidates can apply to jobs");
         }
+
         if (jobApplicationRepository.existsByJobOfferIdAndCandidateId(jobOfferId, candidateId)) {
             throw new RuntimeException("You have already applied to this job");
         }
@@ -47,32 +48,51 @@ public class JobApplicationService {
         return jobApplicationRepository.save(application);
     }
 
-    // Get all job applications (Admin|Recruiter)
+    // getAllJobApplications ('ADMIN', 'RECRUITER')
     public List<JobApplicationResponseDTO> getAllJobApplications() {
         return jobApplicationRepository.findAll().stream()
                 .map(JobApplicationResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    // getJobApplicationById (Admin|Recruiter)
+    // getJobApplicationById ('ADMIN', 'RECRUITER', 'CANDIDATE')
     public JobApplicationResponseDTO getJobApplicationById(Long id) {
         JobApplication application = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job application not found"));
         return JobApplicationResponseDTO.fromEntity(application);
     }
 
-    // Get candidate's job applications
+    // geCandidateJobApplications ('CANDIDATE)
     public List<JobApplicationResponseDTO> geCandidateJobApplications(Long candidateId) {
         return jobApplicationRepository.findByCandidateId(candidateId).stream()
                 .map(JobApplicationResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    // Get applications for recruiter's jobs
+    // getJobsApplicationsForRecruiters ('RECRUITER')
     public List<JobApplicationResponseDTO> getJobsApplicationsForRecruiters(Long recruiterId) {
         return jobApplicationRepository.findByJobOfferUserId(recruiterId).stream()
                 .map(JobApplicationResponseDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    // withdrawApplication ('CANDIDATE', 'RECRUITER', 'ADMIN')
+    public JobApplicationResponseDTO withdrawApplication(Long id, Long userId, User.Role role) {
+        JobApplication application = jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+
+        // Candidate can only withdraw their own application
+        if (role == User.Role.CANDIDATE && !application.getCandidate().getId().equals(userId)) {
+            throw new RuntimeException("You are not the candidate of this job application");
+        }
+
+        // Recruiter can withdraw any application
+        if (role == User.Role.RECRUITER && !application.getJobOffer().getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not the recruiter of this job application");
+        }
+
+        application.setStatus(JobApplication.ApplicationStatus.WITHDRAWN);
+        return JobApplicationResponseDTO.fromEntity(jobApplicationRepository.save(application));
     }
 
 }

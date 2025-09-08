@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobApplicationById/*").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
                         .requestMatchers(HttpMethod.GET, "/api/job-applications/geCandidateJobApplications").hasRole("CANDIDATE")
                         .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobsApplicationsForRecruiters").hasRole("RECRUITER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
 
                         .anyRequest().authenticated()  // for production
                 )
@@ -58,7 +59,7 @@ public class SecurityConfig {
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setStatus(HttpStatus.FORBIDDEN.value());
-                            response.getWriter().write("❌ Forbidden: You do not have permission to access this resource");
+                            response.getWriter().write("Forbidden: You do not have permission to access this resource");
                         })
                 )
         ;
