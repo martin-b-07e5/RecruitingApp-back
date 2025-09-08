@@ -76,6 +76,30 @@ public class JobApplicationService {
                 .collect(Collectors.toList());
     }
 
+    // updateApplicationStatus ('RECRUITER', 'ADMIN')
+    public JobApplicationResponseDTO updateApplicationStatus(Long id, Long userId, User.Role role, JobApplication.ApplicationStatus status) {
+        JobApplication application = jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+
+        // Recruiter can update his job offer applications
+        if (role == User.Role.RECRUITER && !application.getJobOffer().getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not the recruiter of this job application");
+        }
+
+        // Candidates cannot update application status
+        if (role == User.Role.CANDIDATE) {
+            throw new RuntimeException("Candidates cannot update application status");
+        }
+
+        // Cannot set status to DRAFT or WITHDRAWN
+        if (status == JobApplication.ApplicationStatus.DRAFT || status == JobApplication.ApplicationStatus.WITHDRAWN) {
+            throw new RuntimeException("Cannot set status to DRAFT or WITHDRAWN");
+        }
+
+        application.setStatus(status);
+        return JobApplicationResponseDTO.fromEntity(jobApplicationRepository.save(application));
+    }
+
     // withdrawApplication ('CANDIDATE', 'RECRUITER', 'ADMIN')
     public JobApplicationResponseDTO withdrawApplication(Long id, Long userId, User.Role role) {
         JobApplication application = jobApplicationRepository.findById(id)

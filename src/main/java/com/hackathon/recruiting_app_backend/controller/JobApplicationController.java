@@ -2,6 +2,7 @@ package com.hackathon.recruiting_app_backend.controller;
 
 import com.hackathon.recruiting_app_backend.dto.JobApplicationRequestDTO;
 import com.hackathon.recruiting_app_backend.dto.JobApplicationResponseDTO;
+import com.hackathon.recruiting_app_backend.dto.JobApplicationUpdateDTO;
 import com.hackathon.recruiting_app_backend.model.JobApplication;
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.JobOfferRepository;
@@ -125,6 +126,29 @@ public class JobApplicationController {
                     .orElseThrow(() -> new RuntimeException("Recruiter not found"));
             List<JobApplicationResponseDTO> applications = jobApplicationService.getJobsApplicationsForRecruiters(recruiter.getId());
             return ResponseEntity.ok(applications);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("❌ " + e.getMessage());
+        }
+    }
+
+    // updateApplicationStatus ('RECRUITER', 'ADMIN')
+    @PutMapping("/updateApplicationStatus/{id}")
+    @PreAuthorize("hasAnyRole('RECRUITER', 'ADMIN')")
+    public ResponseEntity<?> updateApplicationStatus(@PathVariable Long id, @RequestBody JobApplicationUpdateDTO updateDTO, Authentication authentication) {
+        try {
+            // 1. Get the authenticated user
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            // 2. Update the application
+            JobApplicationResponseDTO application = jobApplicationService.updateApplicationStatus(
+                    id,
+                    user.getId(),
+                    user.getRole(),
+                    updateDTO.status()
+            );
+            // 3. Return the application
+            return ResponseEntity.ok(application);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("❌ " + e.getMessage());
