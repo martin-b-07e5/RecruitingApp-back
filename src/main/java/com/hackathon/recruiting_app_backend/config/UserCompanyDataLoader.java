@@ -21,6 +21,14 @@ public class UserCompanyDataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
 
+    /*
+     * 1. Google
+     * 2. Microsoft
+     * 3. Apple
+     * 4. Amazon
+     * 5. Meta
+     * */
+
     @Override
     public void run(String... args) throws Exception {
         if (userCompanyRepository.count() == 0) {

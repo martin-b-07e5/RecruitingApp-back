@@ -52,6 +52,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/job-applications/deleteJobApplication/*").hasAnyRole("ADMIN", "RECRUITER")
                         .requestMatchers(HttpMethod.PUT, "/api/job-applications/updateApplicationStatus/*").hasAnyRole("RECRUITER", "ADMIN")
+                        // Users
+                        .requestMatchers(HttpMethod.PUT, "/api/users/update/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/delete/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/delete-self").hasAnyRole("RECRUITER", "CANDIDATE")
 
                         // All
                         .anyRequest().authenticated()  // for production

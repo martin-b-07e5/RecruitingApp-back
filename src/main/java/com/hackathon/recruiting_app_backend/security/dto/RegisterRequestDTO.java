@@ -2,6 +2,7 @@ package com.hackathon.recruiting_app_backend.security.dto;
 
 import java.util.List;
 
+/* Data is not required in a record */
 public record RegisterRequestDTO(
         String email,
         String password,

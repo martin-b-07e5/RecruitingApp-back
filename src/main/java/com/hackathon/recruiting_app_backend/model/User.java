@@ -25,25 +25,25 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 254)
-    @Email(message = "Email must be valid")
-    @Size(min = 5, max = 254, message = "Email must be between 5 and 254 characters long")
     @NotNull(message = "Email must not be null")
+    @Size(min = 5, max = 254, message = "Email must be between 5 and 254 characters long")
+    @Email(message = "Email must be valid")
     private String email;
 
     @Column(nullable = false)
-    @Size(min = 6, message = "Password must be at least 6 characters long")
     @NotNull(message = "Password must not be null")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     @JsonIgnore
     private String password;
 
     @Column(name = "first_name", nullable = false, length = 50)
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters long")
     @NotNull(message = "First name must not be null")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters long")
     private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 50)
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
     @NotNull(message = "Last name must not be null")
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
     private String lastName;
 
     @Column(length = 20)
@@ -75,17 +75,18 @@ public class User {
 
     // Relationship for both: recruiters and candidates with companies.
     // Represents a user’s association with companies (e.g., recruiters employed by a company or candidates’ work history).
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserCompany> companies;
 
     // Relationship for candidates with applications.
     // Links candidates to their job applications, supporting the application system.
-    @OneToMany(mappedBy = "candidate")
+    // cascade = CascadeType.ALL and orphanRemoval = true are used to automatically delete related JobApplication records when a candidate is deleted.
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobApplication> jobApplications;
 
     // Relationship for recruiters with job offers
     // Links recruiters to the job offers they create, supporting job management.
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobOffer> jobOffers;  // A recruiter can create many job offers
 
     // Relationship for users with their skills.

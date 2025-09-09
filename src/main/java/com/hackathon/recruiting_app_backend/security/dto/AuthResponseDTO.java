@@ -7,6 +7,8 @@ import lombok.Data;
     ✅ User email
     ✅ User role
 */
+
+/* Data is used because this is a class and not a record */
 @Data
 public class AuthResponseDTO {
     private String token;
