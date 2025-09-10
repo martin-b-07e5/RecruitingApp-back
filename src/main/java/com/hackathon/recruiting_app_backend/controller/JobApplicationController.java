@@ -102,14 +102,14 @@ public class JobApplicationController {
         }
     }
 
-    // geCandidateJobApplications ('CANDIDATE')
-    @GetMapping("/geCandidateJobApplications")
+    // getCandidateJobApplications ('CANDIDATE')
+    @GetMapping("/getCandidateJobApplications")
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<?> geCandidateJobApplications(Authentication authentication) {
+    public ResponseEntity<?> getCandidateJobApplications(Authentication authentication) {
         try {
             User candidate = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("Candidate not found"));
-            List<JobApplicationResponseDTO> applications = jobApplicationService.geCandidateJobApplications(candidate.getId());
+            List<JobApplicationResponseDTO> applications = jobApplicationService.getCandidateJobApplications(candidate.getId());
             return ResponseEntity.ok(applications);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

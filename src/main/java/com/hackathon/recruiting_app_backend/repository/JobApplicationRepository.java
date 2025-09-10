@@ -12,7 +12,7 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     // applyToJob (msg: You have already applied to this job)
     boolean existsByJobOfferIdAndCandidateId(Long jobOfferId, Long candidateId);
 
-    // geCandidateJobApplications
+    // getCandidateJobApplications
     List<JobApplication> findByCandidateId(Long candidateId);
 
     // getJobsApplicationsForRecruiters

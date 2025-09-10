@@ -62,8 +62,8 @@ public class JobApplicationService {
         return JobApplicationResponseDTO.fromEntity(application);
     }
 
-    // geCandidateJobApplications ('CANDIDATE)
-    public List<JobApplicationResponseDTO> geCandidateJobApplications(Long candidateId) {
+    // getCandidateJobApplications ('CANDIDATE)
+    public List<JobApplicationResponseDTO> getCandidateJobApplications(Long candidateId) {
         return jobApplicationRepository.findByCandidateId(candidateId).stream()
                 .map(JobApplicationResponseDTO::fromEntity)
                 .collect(Collectors.toList());
@@ -131,7 +131,7 @@ public class JobApplicationService {
         if (role == User.Role.RECRUITER && !application.getJobOffer().getUser().getId().equals(userId)) {
             throw new RuntimeException("You are not the recruiter of this job application");
         }
-        
+
         jobApplicationRepository.delete(application);
     }
 

@@ -34,31 +34,36 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        // Job Offers
-                        .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
-                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
-                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
-                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
-                        .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
-                        // Job Applications
-                        .requestMatchers(HttpMethod.POST, "/api/job-applications/apply").hasRole("CANDIDATE")
-                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getAllJobApplications").hasAnyRole("ADMIN", "RECRUITER")
-                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobApplicationById/*").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
-                        .requestMatchers(HttpMethod.GET, "/api/job-applications/geCandidateJobApplications").hasRole("CANDIDATE")
-                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobsApplicationsForRecruiters").hasRole("RECRUITER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/job-applications/deleteJobApplication/*").hasAnyRole("ADMIN", "RECRUITER")
-                        .requestMatchers(HttpMethod.PUT, "/api/job-applications/updateApplicationStatus/*").hasAnyRole("RECRUITER", "ADMIN")
-                        // Users
-                        .requestMatchers(HttpMethod.PUT, "/api/users/update/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/delete/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/delete-self").hasAnyRole("RECRUITER", "CANDIDATE")
+                                // Auth
+                                .requestMatchers("/api/auth/**").permitAll()
+                                // Job Offers
+                                .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
+                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
+                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
+                                // Job Applications
+                                .requestMatchers(HttpMethod.POST, "/api/job-applications/apply").hasRole("CANDIDATE")
+                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getAllJobApplications").hasAnyRole("ADMIN", "RECRUITER")
+                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobApplicationById/*").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getCandidateJobApplications").hasRole("CANDIDATE")
+                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobsApplicationsForRecruiters").hasRole("RECRUITER")
+                                .requestMatchers(HttpMethod.PUT, "/api/job-applications/updateApplicationStatus/*").hasAnyRole("RECRUITER", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/job-applications/deleteJobApplication/*").hasAnyRole("ADMIN", "RECRUITER")
+                                // Users
+                                .requestMatchers(HttpMethod.PUT, "/api/users/update/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                                .requestMatchers(HttpMethod.DELETE, "/api/users/delete/**").hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/users/delete-self").hasAnyRole("RECRUITER", "CANDIDATE")
 
-                        // All
-                        .anyRequest().authenticated()  // for production
+                                .requestMatchers(HttpMethod.GET, "/api/users/getAllUsers").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/users/getUserById/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+//                        .requestMatchers(HttpMethod.GET, "/api/users/getUserByEmail/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+//                        .requestMatchers(HttpMethod.GET, "/api/users/getUserByRole/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+
+                                // All
+                                .anyRequest().authenticated()  // for production
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex
