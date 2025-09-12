@@ -3,6 +3,8 @@ package com.hackathon.recruiting_app_backend.controller;
 import com.hackathon.recruiting_app_backend.dto.UserRequestUpdateDTO;
 import com.hackathon.recruiting_app_backend.dto.UserResponseDTO;
 import com.hackathon.recruiting_app_backend.model.User;
+import com.hackathon.recruiting_app_backend.model.UserCompany;
+import com.hackathon.recruiting_app_backend.repository.UserCompanyRepository;
 import com.hackathon.recruiting_app_backend.repository.UserRepository;
 import com.hackathon.recruiting_app_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,8 +26,70 @@ public class UserController {
     // dependency injection
     private final UserService userService;
     private final UserRepository userRepository;
+    private final UserCompanyRepository userCompanyRepository;
 
-    // PUT {{baseURL1}}/api/users/update/{userId} Endpoint for users to update their own details and admins to update any user.
+    // (READ) - GET /api/users/getAllUsers (admin-only)
+    @GetMapping("/getAllUsers")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllUsers() {
+        try {
+            List<User> users = userRepository.findAll();
+
+            // return ResponseEntity.ok(users);  // to avoid circular reference use dto
+            List<UserResponseDTO> userResponseDTOs = users.stream().map(UserResponseDTO::fromEntityUser).toList();
+            return ResponseEntity.ok(userResponseDTOs);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("❌ " + e.getMessage());
+        }
+    }
+
+    // (READ) - GET /api/users/getUserById/{userId}
+    @GetMapping("/getUserById/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER', 'CANDIDATE')")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId, Authentication authentication) {
+        try {
+            User authenticatedUser = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+            if (authenticatedUser.getRole() != User.Role.ADMIN && !authenticatedUser.getId().equals(userId)) {
+                throw new RuntimeException("You are not authorized to view this user");
+            }
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+            // return ResponseEntity.ok(user);  // to avoid circular reference use dto
+            return ResponseEntity.ok(UserResponseDTO.fromEntityUser(user));
+
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("❌ " + e.getMessage());
+        }
+    }
+
+    // GET /api/user/companies - Get recruiter's company IDs
+    @GetMapping("/companies")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<?> getCompanies(Authentication authentication) {
+        try {
+            User authenticatedUser = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+            if (authenticatedUser.getRole() != User.Role.RECRUITER) {
+                throw new RuntimeException("You are not authorized to view this user");
+            }
+            List<UserCompany> userCompanies = userCompanyRepository.findByUser(authenticatedUser);
+            List<Map<String, Object>> companyData = userCompanies.stream()
+                    .map(userCompany -> {
+                        Map<String, Object> company = new HashMap<>();
+                        company.put("id", userCompany.getCompany().getId());
+                        company.put("name", userCompany.getCompany().getName());
+                        return company;
+                    })
+                    .toList();
+            return ResponseEntity.ok(companyData);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("❌ " + e.getMessage());
+        }
+    }
+
+    // (UPDATE) - PUT {{baseURL1}}/api/users/update/{userId} Endpoint for users to update their own details and admins to update any user.
     @PutMapping("/update/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER', 'CANDIDATE')")
     public ResponseEntity<?> updateUser(
@@ -63,42 +129,6 @@ public class UserController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("❌ " + e.getMessage());
-        }
-    }
-
-    // GET /api/users/getAllUsers (admin-only)
-    @GetMapping("/getAllUsers")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> getAllUsers() {
-        try {
-            List<User> users = userRepository.findAll();
-
-            // return ResponseEntity.ok(users);  // to avoid circular reference use dto
-            List<UserResponseDTO> userResponseDTOs = users.stream().map(UserResponseDTO::fromEntityUser).toList();
-            return ResponseEntity.ok(userResponseDTOs);
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("❌ " + e.getMessage());
-        }
-    }
-
-    // GET /api/users/getUserById/{userId}
-    @GetMapping("/getUserById/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECRUITER', 'CANDIDATE')")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId, Authentication authentication) {
-        try {
-            User authenticatedUser = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new RuntimeException("User not found"));
-            if (authenticatedUser.getRole() != User.Role.ADMIN && !authenticatedUser.getId().equals(userId)) {
-                throw new RuntimeException("You are not authorized to view this user");
-            }
-            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-
-            // return ResponseEntity.ok(user);  // to avoid circular reference use dto
-            return ResponseEntity.ok(UserResponseDTO.fromEntityUser(user));
-
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("❌ " + e.getMessage());
         }
     }
 

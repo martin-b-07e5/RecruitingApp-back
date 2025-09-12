@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +32,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
 //                .csrf(csrf -> csrf.disable())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
@@ -59,6 +63,7 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/api/users/getAllUsers").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/users/getUserById/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                                .requestMatchers(HttpMethod.GET, "/api/users/companies").hasRole("RECRUITER")
 //                        .requestMatchers(HttpMethod.GET, "/api/users/getUserByEmail/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
 //                        .requestMatchers(HttpMethod.GET, "/api/users/getUserByRole/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
 
@@ -78,6 +83,18 @@ public class SecurityConfig {
                 )
         ;
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:5173"); // Frontend URL
+        configuration.addAllowedMethod("*"); // Allow all HTTP methods
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.setAllowCredentials(true); // Allow cookies, auth headers
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean

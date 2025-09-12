@@ -29,11 +29,8 @@ public class JobOffer {
     @Column(name = "salary", nullable = false)
     private String salary;
 
-    @Column(name = "location", nullable = false)
+    @Column(name = "location", nullable = false) //    REMOTE, HYBRID, Mountain View, CA, etc
     private String location;
-//    REMOTE,         // Remote (if specific)
-//    HYBRID;         // Hybrid
-//    Mountain View, CA
 
     @Column(name = "employment_type", nullable = false)
     @Enumerated(EnumType.STRING)
