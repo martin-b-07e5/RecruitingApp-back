@@ -119,12 +119,17 @@ public class JobApplicationController {
 
     // getJobsApplicationsForRecruiters ('RECRUITER')
     @GetMapping("/getJobsApplicationsForRecruiters")
-    @PreAuthorize("hasRole('RECRUITER')")
+    @PreAuthorize("hasRole('RECRUITER', 'ADMIN')") // 🌟 Allow ADMIN
     public ResponseEntity<?> getJobsApplicationsForRecruiters(Authentication authentication) {
         try {
-            User recruiter = userRepository.findByEmail(authentication.getName())
-                    .orElseThrow(() -> new RuntimeException("Recruiter not found"));
-            List<JobApplicationResponseDTO> applications = jobApplicationService.getJobsApplicationsForRecruiters(recruiter.getId());
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            List<JobApplicationResponseDTO> applications;
+            if (user.getRole() == User.Role.ADMIN) {
+                applications = jobApplicationService.getAllJobApplications(); // 🌟 ADMIN gets all applications
+            } else {
+                applications = jobApplicationService.getJobsApplicationsForRecruiters(user.getId()); // 🌟 RECRUITER gets their own
+            }
             return ResponseEntity.ok(applications);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -140,6 +145,17 @@ public class JobApplicationController {
             // 1. Get the authenticated user
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
+
+            if (user.getRole() == User.Role.RECRUITER) {
+                JobApplication application = jobApplicationService.findJobApplicationEntityById(id);
+                Long jobOfferRecruiterId = jobOfferRepository.findById(application.getJobOffer().getId())
+                        .orElseThrow(() -> new RuntimeException("Job offer not found"))
+                        .getUser().getId();
+                if (!jobOfferRecruiterId.equals(user.getId())) {
+                    throw new RuntimeException("Recruiter Not authorized to update this application");
+                }
+            }
+
             // 2. Update the application
             JobApplicationResponseDTO application = jobApplicationService.updateApplicationStatus(
                     id,

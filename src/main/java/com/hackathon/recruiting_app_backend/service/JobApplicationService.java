@@ -62,6 +62,12 @@ public class JobApplicationService {
         return JobApplicationResponseDTO.fromEntity(application);
     }
 
+    // 🌟 New method to return entity for authorization checks
+    public JobApplication findJobApplicationEntityById(Long id) {
+        return jobApplicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job application not found"));
+    }
+
     // getCandidateJobApplications ('CANDIDATE)
     public List<JobApplicationResponseDTO> getCandidateJobApplications(Long candidateId) {
         return jobApplicationRepository.findByCandidateId(candidateId).stream()
