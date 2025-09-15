@@ -92,8 +92,8 @@ public class JobApplicationService {
         }
 
         // Cannot set status to DRAFT or WITHDRAWN
-        if (status == JobApplication.ApplicationStatus.DRAFT || status == JobApplication.ApplicationStatus.WITHDRAWN) {
-            throw new RuntimeException("Cannot set status to DRAFT or WITHDRAWN");
+        if (status == JobApplication.ApplicationStatus.WITHDRAWN) {
+            throw new RuntimeException("Cannot set status to WITHDRAWN");
         }
 
         application.setStatus(status);

@@ -44,7 +44,7 @@ public class JobApplication {
     private ApplicationStatus status;
 
     public enum ApplicationStatus {
-        DRAFT,          // For the recruiter
+        //        DRAFT,          // For the recruiter
         PENDING,        // Application submitted
         UNDER_REVIEW,   // Under review
         INTERVIEW,      // Moved on to interview
