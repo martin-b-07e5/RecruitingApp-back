@@ -198,26 +198,32 @@ public class JobOfferController {
     // DELETE  http://localhost:8080/api/job-offers/11
     public ResponseEntity<?> deleteJobOffer(@PathVariable Long id, Authentication authentication) {
         try {
-            // 1. Get the authenticated user (user)
+            // Get the authenticated user (user)
             String email = authentication.getName();
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User (admin | recruiter) not found"));
 
-            // 2. First check if job offer EXISTS (without checking user). 404 - When it doesn't exist
+            // First check if job offer EXISTS (without checking user). 404 - When it doesn't exist
             Optional<JobOffer> jobOffer = jobOfferService.getJobOfferById(id);
             if (jobOffer.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("❌ Job offer not found");
             }
 
-            // 3. If user is ADMIN, skip ownership check
+            // Check for active applications
+            if (!jobOffer.get().getJobApplications().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("❌ Cannot delete job offer with active applications");
+            }
+
+            // If user is ADMIN, skip ownership check
             if (user.getRole() == User.Role.ADMIN) {
                 jobOfferService.deleteJobOffer(id);
                 return ResponseEntity.ok()
                         .body("✅ Job offer '" + jobOffer.get().getTitle() + "' (ID: " + id + ") deleted successfully by admin");
             }
 
-            // 4. Then check if job offer belongs to this user. 403 - When you don't have permission
+            // Then check if job offer belongs to this user. 403 - When you don't have permission
             Optional<JobOffer> recruiterJobOffer = jobOfferService.getJobOfferByIdAndRecruiter(id, user.getId());
             if (recruiterJobOffer.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)

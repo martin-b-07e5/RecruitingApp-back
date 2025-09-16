@@ -5,6 +5,7 @@ import com.hackathon.recruiting_app_backend.model.Company;
 import com.hackathon.recruiting_app_backend.model.JobOffer;
 import com.hackathon.recruiting_app_backend.model.User;
 import com.hackathon.recruiting_app_backend.repository.JobOfferRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,7 @@ public class JobOfferService {
     }
 
     // delete job offer
+    @Transactional
     public void deleteJobOffer(Long id) {
         if (!jobOfferRepository.existsById(id)) {
             throw new RuntimeException("Job offer with ID " + id + " not found");
