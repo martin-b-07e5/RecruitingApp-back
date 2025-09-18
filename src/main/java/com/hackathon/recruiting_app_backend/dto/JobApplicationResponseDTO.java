@@ -18,6 +18,9 @@ public record JobApplicationResponseDTO(
         String jobOfferTitle,
         Long companyId,
         String companyName,
+        Long recruiterId, // 🌟 Add recruiterId
+        String recruiterFirstName, // 🌟 Add recruiterFirstName
+        String recruiterLastName, // 🌟 Add recruiterLastName
         // Candidate
         Long candidateId,
         String candidateFirstName,
@@ -45,6 +48,9 @@ public record JobApplicationResponseDTO(
                 jobApplication.getJobOffer().getTitle(),
                 jobApplication.getJobOffer().getCompany().getId(),
                 jobApplication.getJobOffer().getCompany().getName(),
+                jobApplication.getJobOffer().getUser().getId(), // 🌟 Add recruiterId
+                jobApplication.getJobOffer().getUser().getFirstName(), // 🌟 Add recruiterFirstName
+                jobApplication.getJobOffer().getUser().getLastName(), // 🌟 Add recruiterLastName
                 // Candidate
                 jobApplication.getCandidate().getId(),
                 jobApplication.getCandidate().getFirstName(),
