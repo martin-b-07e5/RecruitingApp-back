@@ -68,7 +68,7 @@ public class JobApplicationService {
                 .orElseThrow(() -> new RuntimeException("Job application not found"));
     }
 
-    // getCandidateJobApplications ('CANDIDATE)
+    // getCandidateJobApplications ('CANDIDATE')
     public List<JobApplicationResponseDTO> getCandidateJobApplications(Long candidateId) {
         return jobApplicationRepository.findByCandidateId(candidateId).stream()
                 .map(JobApplicationResponseDTO::fromEntity)
@@ -97,9 +97,9 @@ public class JobApplicationService {
             throw new RuntimeException("Candidates cannot update application status");
         }
 
-        // Cannot set status to DRAFT or WITHDRAWN
+        // Recruiter Cannot set status to WITHDRAWN
         if (status == JobApplication.ApplicationStatus.WITHDRAWN) {
-            throw new RuntimeException("Cannot set status to WITHDRAWN");
+            throw new RuntimeException("Recruiter Cannot set status to WITHDRAWN");
         }
 
         application.setStatus(status);

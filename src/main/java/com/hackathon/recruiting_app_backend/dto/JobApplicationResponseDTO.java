@@ -16,6 +16,8 @@ public record JobApplicationResponseDTO(
         // JobOffer
         Long jobOfferId,
         String jobOfferTitle,
+        Long companyId,
+        String companyName,
         // Candidate
         Long candidateId,
         String candidateFirstName,
@@ -41,6 +43,8 @@ public record JobApplicationResponseDTO(
                 // JobOffer
                 jobApplication.getJobOffer().getId(),
                 jobApplication.getJobOffer().getTitle(),
+                jobApplication.getJobOffer().getCompany().getId(),
+                jobApplication.getJobOffer().getCompany().getName(),
                 // Candidate
                 jobApplication.getCandidate().getId(),
                 jobApplication.getCandidate().getFirstName(),
