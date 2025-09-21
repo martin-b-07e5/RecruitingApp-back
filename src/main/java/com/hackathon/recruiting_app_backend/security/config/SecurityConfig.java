@@ -2,7 +2,6 @@ package com.hackathon.recruiting_app_backend.security.config;
 
 import com.hackathon.recruiting_app_backend.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,14 +26,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    @Value("${frontend.url}") // 🌟 Inject frontendUrl at class level
-    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
-//                .csrf(csrf -> csrf.disable())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -87,10 +83,12 @@ public class SecurityConfig {
     }
 
     @Bean
-//    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.url}") String frontendUrl) {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin(frontendUrl); // 🌟 Use class-level field
+        configuration.addAllowedOrigin("http://localhost:3000"); // back
+//        configuration.addAllowedOrigin("http://localhost:5173"); // front (I don't think this is necessary)
+        configuration.addAllowedOrigin("http://localhost:8085"); // back dockerized local
+        configuration.addAllowedOrigin("http://localhost:8086"); // front dockerized local
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true); // Allow cookies, auth headers
