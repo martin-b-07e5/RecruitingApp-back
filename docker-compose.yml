@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: recruiting-app
+    ports:
+      - "8085:8085"  # Match your Dockerfile EXPOSE 8085
+    environment:
+      # Connect to local MariaDB via host.docker.internal
+      - DB_HOST=host.docker.internal
+      - DB_PORT=3306
+      - DB_NAME=recruiting_app_db
+      - DB_USERNAME=admin
+      - DB_PASSWORD=q1w2e3-A
+      - JWT_SECRET=eEQbWWxONDq99ajh7UKFe9Kwd3qeV/xgh8bjqKI2dxTMkVjkaGOxcHIlZfPgKiox1234
+      - JWT_EXPIRATION=31536000000
+      - SERVER_PORT=8085
+      - FRONTEND_URL=http://host.docker.internal:5173
+    networks:
+      - recruiting-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  recruiting-network:
+    driver: bridge
