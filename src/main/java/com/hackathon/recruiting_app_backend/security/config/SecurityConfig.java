@@ -85,12 +85,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // back local
+        configuration.addAllowedOrigin("http://localhost:8080"); // back local
         configuration.addAllowedOrigin("http://localhost:5173"); // front local
         configuration.addAllowedOrigin("http://localhost:8085"); // back dockerized local
-        configuration.addAllowedOrigin("http://localhost:8086"); // front dockerized local
-//        configuration.addAllowedOrigin("http://localhost:8087"); // back dockerized remote
-//        configuration.addAllowedOrigin("http://localhost:8088"); // front dockerized remote
+        configuration.addAllowedOrigin("http://localhost:3001"); // front dockerized local
+        configuration.addAllowedOrigin("http://localhost:8086"); // back dockerized remote
+        configuration.addAllowedOrigin("http://localhost:3002"); // front dockerized remote
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true); // Allow cookies, auth headers
