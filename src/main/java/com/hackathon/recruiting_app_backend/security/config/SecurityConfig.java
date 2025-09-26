@@ -85,12 +85,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:8080"); // back local
-        configuration.addAllowedOrigin("http://localhost:5173"); // front local
-        configuration.addAllowedOrigin("http://localhost:8085"); // back dockerized local
-        configuration.addAllowedOrigin("http://localhost:3001"); // front dockerized local
-        configuration.addAllowedOrigin("http://localhost:8086"); // back dockerized remote
-        configuration.addAllowedOrigin("http://localhost:3002"); // front dockerized remote
+        configuration.addAllowedOrigin("http://localhost:5173"); // Frontend dev
+        configuration.addAllowedOrigin("http://localhost:3001"); // Frontend dockerized
+        configuration.addAllowedOrigin("http://146.235.58.90:3002"); // Frontend dockerized remote
+        configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:3002"); // Frontend DNS
+        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:3002"); // Frontend DNS
+//        configuration.addAllowedOrigin("http://localhost:8080"); // esto no es necesario. back local
+//        configuration.addAllowedOrigin("http://localhost:8085"); // esto no es necesario. back dockerized local
+//        configuration.addAllowedOriginPattern("*"); // Temporal para pruebas
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true); // Allow cookies, auth headers
