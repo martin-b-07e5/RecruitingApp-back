@@ -90,9 +90,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://146.235.58.90:3002"); // Frontend dockerized remote
         configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:3002"); // Frontend DNS
         configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:3002"); // Frontend DNS
-//        configuration.addAllowedOrigin("http://localhost:8080"); // esto no es necesario. back local
-//        configuration.addAllowedOrigin("http://localhost:8085"); // esto no es necesario. back dockerized local
-//        configuration.addAllowedOriginPattern("*"); // Temporal para pruebas
+//        configuration.addAllowedOriginPattern("*"); // Temp for testing
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true); // Allow cookies, auth headers
