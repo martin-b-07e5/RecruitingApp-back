@@ -86,11 +86,25 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:5173"); // Frontend dev
+        configuration.addAllowedOrigin("https://localhost:5173"); // HTTPS Frontend dev
+
         configuration.addAllowedOrigin("http://localhost:3001"); // Frontend dockerized
-        configuration.addAllowedOrigin("http://146.235.58.90:3002"); // Frontend dockerized remote
-        configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:3002"); // Frontend DNS
-        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:3002"); // Frontend DNS
-//        configuration.addAllowedOriginPattern("*"); // Temp for testing
+        configuration.addAllowedOrigin("https://localhost:3001"); // HTTPS Frontend dockerized
+        configuration.addAllowedOrigin("http://localhost:3002"); // Frontend dockerized
+        configuration.addAllowedOrigin("https://localhost:3002"); // HTTPS Frontend dockerized
+
+        configuration.addAllowedOrigin("http://146.235.58.90:3003"); // Frontend dockerized remote
+        configuration.addAllowedOrigin("https://146.235.58.90:3003"); // HTTPS Frontend dockerized remote
+        configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:3003"); // Frontend DNS
+        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:3003"); // HTTPS Frontend DNS
+
+        configuration.addAllowedOrigin("http://146.235.58.90:8086");
+        configuration.addAllowedOrigin("https://146.235.58.90:8086");
+        configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:8086");
+        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:8086");
+
+        configuration.addAllowedOriginPattern("*"); // Temp for testing
+
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true); // Allow cookies, auth headers
