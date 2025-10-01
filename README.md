@@ -1,3 +1,5 @@
+[RecruitingApp url](https://hackaton202508.duckdns.org:3003/)
+
 # Hackathon ONE
 
 Hackathon Tech Advanced - Oracle Next Education (ONE)
@@ -41,19 +43,21 @@ backend and React frontend.
 - ✅ **Job Management** - 🎯Recruiters create, edit, and publish job offers.
 - ✅ **Application System** - 👤Candidates can apply for jobs and track status.
 - ✅ **User Management** - Role-based access control.
-- ✅ **Notification System** - Real-time updates for applications.
+  ~~- ✅ **Notification System** - Real-time updates for applications.~~
 
 ## 🛠️ Technology Stack
 
-### Backend (Current Implementation)
+### Backend
 
 - **Java 21** - Programming language
-- **Spring Boot 3.5** - Framework
+- **Spring Boot**: Java framework for building the REST API
 - **Spring Data JPA** - Database persistence
 - **Spring Security** - Authentication & authorization
-- **MySQL** - Database
+- **MySQL**: Relational database for data storage
 - **Maven** - Dependency management
 - **Lombok** - Code reduction
+- **Docker**: Containerization for deployment
+- **Let's Encrypt**: SSL/TLS certificates for secure HTTPS API endpoints
 
 ### Frontend (Planned)
 
@@ -71,48 +75,83 @@ The database schema includes:
 - **JobOffers** - Job postings and details
 - **Applications** - Application tracking system
 - **Companies** - Company information
-- **Notifications** - User notification system
-- **AdminLogs** - Admin logs
+- ~~**Notifications** - User notification system~~
+- ~~**AdminLogs** - Admin logs~~
 
 ## 📁 Project Structure
 
 ```
 recruiting_app_backend
-├── config
-│ ├── AdminDataLoader.java
-│ └── CompanyDataLoader.java
-├── controller
-│ ├── JobOfferController.java
-│ └── UserController.java
-├── dto
-│ ├── JobOfferRequestDTO.java
-│ └── JobOfferResponseDTO.java
-├── model
-│ ├── AdminLog.java
-│ ├── Application.java
-│ ├── Company.java
-│ ├── JobOffer.java
-│ ├── Notification.java
-│ ├── UserCompany.java
-│ └── User.java
-├── RecruitingAppBackendApplication.java
-├── repository
-│ ├── CompanyRepository.java
-│ ├── UserRepository.java
-│ └── JobOfferRepository.java
-├── security
-│ ├── AuthController.java
-│ ├── AuthRequestDTO.java
-│ ├── AuthResponseDTO.java
-│ ├── AuthService.java
-│ ├── CustomUserDetailsService.java
-│ ├── JwtAuthenticationFilter.java
-│ ├── JwtUtil.java
-│ ├── RegisterRequestDTO.java
-│ └── SecurityConfig.java
-└── service
-    ├── JobOfferService.java
-    └── UserService.java
+.
+├── java
+│ └── com
+│     └── hackathon
+│         └── recruiting_app_backend
+│             ├── config
+│             │ ├── AdminDataLoader.java
+│             │ ├── CompanyDataLoader.java
+│             │ ├── EnvConfig.java
+│             │ ├── JobDataLoader.java
+│             │ └── UserCompanyDataLoader.java
+│             ├── controller
+│             │ ├── JobApplicationController.java
+│             │ ├── JobOfferController.java
+│             │ └── UserController.java
+│             ├── dto
+│             │ ├── JobApplicationRequestDTO.java
+│             │ ├── JobApplicationResponseDTO.java
+│             │ ├── JobApplicationUpdateDTO.java
+│             │ ├── JobOfferRequestDTO.java
+│             │ ├── JobOfferResponseDTO.java
+│             │ ├── JobOfferUpdateDTO.java
+│             │ ├── UserRequestUpdateDTO.java
+│             │ └── UserResponseDTO.java
+│             ├── model
+│             │ ├── AdminLog.java
+│             │ ├── Company.java
+│             │ ├── JobApplication.java
+│             │ ├── JobOffer.java
+│             │ ├── Notification.java
+│             │ ├── Skill.java
+│             │ ├── UserCompany.java
+│             │ └── User.java
+│             ├── RecruitingAppBackendApplication.java
+│             ├── repository
+│             │ ├── CompanyRepository.java
+│             │ ├── JobApplicationRepository.java
+│             │ ├── JobOfferRepository.java
+│             │ ├── UserCompanyRepository.java
+│             │ └── UserRepository.java
+│             ├── security
+│             │ ├── config
+│             │ │ └── SecurityConfig.java
+│             │ ├── controller
+│             │ │ └── AuthController.java
+│             │ ├── dto
+│             │ │ ├── AuthRequestDTO.java
+│             │ │ ├── AuthResponseDTO.java
+│             │ │ └── RegisterRequestDTO.java
+│             │ ├── filter
+│             │ │ └── JwtAuthenticationFilter.java
+│             │ ├── service
+│             │ │ ├── AuthService.java
+│             │ │ └── CustomUserDetailsService.java
+│             │ └── util
+│             │     └── JwtUtil.java
+│             └── service
+│                 ├── JobApplicationService.java
+│                 ├── JobOfferService.java
+│                 └── UserService.java
+└── resources
+    ├── application.properties
+    ├── static
+    │ ├── images
+    │ │ └── erd-diagram.png
+    │ ├── resume1.pdf
+    │ ├── resume2.pdf
+    │ └── resume3.pdf
+    └── templates
+
 ```
 
 ## 🔐 Security Features
