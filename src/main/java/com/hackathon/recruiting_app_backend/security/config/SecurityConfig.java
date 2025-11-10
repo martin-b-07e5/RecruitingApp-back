@@ -35,37 +35,35 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                // Auth
-                                .requestMatchers("/api/auth/**").permitAll()
-                                // Job Offers
-                                .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
-                                .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
-                                .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
-                                // Job Applications
-                                .requestMatchers(HttpMethod.POST, "/api/job-applications/apply").hasRole("CANDIDATE")
-                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getAllJobApplications").hasAnyRole("ADMIN", "RECRUITER")
-                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobApplicationById/*").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
-                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getCandidateJobApplications").hasRole("CANDIDATE")
-                                .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobsApplicationsForRecruiters").hasAnyRole("RECRUITER", "ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/api/job-applications/updateApplicationStatus/*").hasAnyRole("RECRUITER", "ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/job-applications/deleteJobApplication/*").hasAnyRole("ADMIN", "RECRUITER")
-                                // Users
-                                .requestMatchers(HttpMethod.PUT, "/api/users/update/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
-                                .requestMatchers(HttpMethod.DELETE, "/api/users/delete/**").hasAnyRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/users/delete-self").hasAnyRole("RECRUITER", "CANDIDATE")
+                        // Auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        // Job Offers
+                        .requestMatchers(HttpMethod.POST, "/api/job-offers/create").hasRole("RECRUITER")  // Recruiters can post new job opportunities
+                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getAllJobOffers").permitAll() // Anyone can view job offers (no login required)
+                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getJobOfferById/**").permitAll() // → Anyone can view job offers (no login required)
+                        .requestMatchers(HttpMethod.GET, "/api/job-offers/getMyJobOffers").hasRole("RECRUITER")  // Only the recruiter who created the offer can view it
+                        .requestMatchers(HttpMethod.PUT, "/api/job-offers/**").hasAnyRole("RECRUITER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/job-offers/*").hasAnyRole("RECRUITER", "ADMIN")
+                        // Job Applications
+                        .requestMatchers(HttpMethod.POST, "/api/job-applications/apply").hasRole("CANDIDATE")
+                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getAllJobApplications").hasAnyRole("ADMIN", "RECRUITER")
+                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobApplicationById/*").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getCandidateJobApplications").hasRole("CANDIDATE")
+                        .requestMatchers(HttpMethod.GET, "/api/job-applications/getJobsApplicationsForRecruiters").hasAnyRole("RECRUITER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/job-applications/updateApplicationStatus/*").hasAnyRole("RECRUITER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/job-applications/withdrawApplication/*").hasAnyRole("CANDIDATE", "RECRUITER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/job-applications/deleteJobApplication/*").hasAnyRole("ADMIN", "RECRUITER")
+                        // Users
+                        .requestMatchers(HttpMethod.PUT, "/api/users/update/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/delete/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/delete-self").hasAnyRole("RECRUITER", "CANDIDATE")
 
-                                .requestMatchers(HttpMethod.GET, "/api/users/getAllUsers").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/users/getUserById/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
-                                .requestMatchers(HttpMethod.GET, "/api/users/companies").hasRole("RECRUITER")
-//                        .requestMatchers(HttpMethod.GET, "/api/users/getUserByEmail/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
-//                        .requestMatchers(HttpMethod.GET, "/api/users/getUserByRole/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                        .requestMatchers(HttpMethod.GET, "/api/users/getAllUsers").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/users/getUserById/**").hasAnyRole("ADMIN", "RECRUITER", "CANDIDATE")
+                        .requestMatchers(HttpMethod.GET, "/api/users/companies").hasRole("RECRUITER")
 
-                                // All
-                                .anyRequest().authenticated()  // for production
+                        // All
+                        .anyRequest().authenticated()  // for production
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex
@@ -93,17 +91,14 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:3002"); // Frontend dockerized
         configuration.addAllowedOrigin("https://localhost:3002"); // HTTPS Frontend dockerized
 
-        configuration.addAllowedOrigin("http://146.235.58.90:3003"); // Frontend dockerized remote
-        configuration.addAllowedOrigin("https://146.235.58.90:3003"); // HTTPS Frontend dockerized remote
-        configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:3003"); // Frontend DNS
-        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:3003"); // HTTPS Frontend DNS
+        configuration.addAllowedOrigin("https://146.235.58.90:3003");
+        configuration.addAllowedOrigin("https://iubuntu.duckdns.org:3003/");
+        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:3003/");
 
-        configuration.addAllowedOrigin("http://146.235.58.90:8086");
-        configuration.addAllowedOrigin("https://146.235.58.90:8086");
-        configuration.addAllowedOrigin("http://hackaton202508.duckdns.org:8086");
-        configuration.addAllowedOrigin("https://hackaton202508.duckdns.org:8086");
+        configuration.addAllowedOrigin("https://irocky9.duckdns.org");  // first app
+        configuration.addAllowedOrigin("https://irocky9.duckdns.org:8444");  // second app
 
-        configuration.addAllowedOriginPattern("*"); // Temp for testing
+//        configuration.addAllowedOriginPattern("*"); // Temp for testing
 
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
