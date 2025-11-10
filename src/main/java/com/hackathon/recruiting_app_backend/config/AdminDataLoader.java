@@ -9,13 +9,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
 @Order(1) // Run first
 public class AdminDataLoader implements CommandLineRunner {
+    private static final String DEFAULT_PASSWORD = "password123";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -26,7 +26,7 @@ public class AdminDataLoader implements CommandLineRunner {
             // Admin.
             User admin = User.builder()
                     .email("admin@recruitingapp.com")
-                    .password(passwordEncoder.encode("password123"))
+                    .password(passwordEncoder.encode(DEFAULT_PASSWORD))
                     .firstName("Alice")
                     .lastName("Johnson")
                     .phone("+1234567890")
@@ -37,7 +37,7 @@ public class AdminDataLoader implements CommandLineRunner {
             // Test recruiter.
             User recruiter = User.builder()
                     .email("recruiter@google.com")
-                    .password(passwordEncoder.encode("password123"))
+                    .password(passwordEncoder.encode(DEFAULT_PASSWORD))
                     .firstName("Robert")
                     .lastName("Brown")
                     .phone("+1234567891")
@@ -48,7 +48,7 @@ public class AdminDataLoader implements CommandLineRunner {
             // Test recruiter1
             User recruiter1 = User.builder()
                     .email("recruiter1@example.com")
-                    .password(passwordEncoder.encode("password123"))
+                    .password(passwordEncoder.encode(DEFAULT_PASSWORD))
                     .firstName("Jane")
                     .lastName("Smith")
                     .phone("+1234567893")
@@ -59,7 +59,7 @@ public class AdminDataLoader implements CommandLineRunner {
             // Test Candidate
             User candidate = User.builder()
                     .email("candidate@example.com")
-                    .password(passwordEncoder.encode("password123"))
+                    .password(passwordEncoder.encode(DEFAULT_PASSWORD))
                     .firstName("Maria")
                     .lastName("Brown")
                     .phone("+1234567892")
@@ -74,12 +74,12 @@ public class AdminDataLoader implements CommandLineRunner {
                             .name(name)
                             .user(candidate)
                             .build())
-                    .collect(Collectors.toList()));
+                    .toList());
 
             // New Test Candidate1
             User candidate1 = User.builder()
                     .email("candidate1@example.com")
-                    .password(passwordEncoder.encode("password123"))
+                    .password(passwordEncoder.encode(DEFAULT_PASSWORD))
                     .firstName("Carlos")
                     .lastName("Rodriguez")
                     .phone("+1234567894")
@@ -93,7 +93,7 @@ public class AdminDataLoader implements CommandLineRunner {
                             .name(name)
                             .user(candidate1)
                             .build())
-                    .collect(Collectors.toList()));
+                    .toList());
 
             userRepository.save(admin);
             userRepository.save(recruiter);
